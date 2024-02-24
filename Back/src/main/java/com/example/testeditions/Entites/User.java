@@ -57,6 +57,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
     private List<Subscription> subscriptions;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+    private List<Schedule> schedules;
+
 
 
 
