@@ -9,6 +9,7 @@ import { PreferancesComponent } from './login/component/preferances/preferances.
 import { ProfileComponent } from './login/component/profile/profile.component';
 import { UpdateComponent } from './login/component/update/update.component';
 import { ChatComponent } from './login/component/chat/chat.component';
+import { ScheduleComponent } from './covoiturage/component/schedule/schedule.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path:"profile" , component:ProfileComponent},
   {path:"update" , component:UpdateComponent},
   {path:"chat" , component:ChatComponent},
+  {path:"schedule" , component:ScheduleComponent},
   {path:"" , component:LoginComponent},
   {path:"preferances" , component:PreferancesComponent},
   {path:"**",redirectTo:"home" ,pathMatch:"full"} 
