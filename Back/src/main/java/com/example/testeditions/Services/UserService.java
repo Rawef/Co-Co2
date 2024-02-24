@@ -31,4 +31,15 @@ public interface UserService {
 
     User disconnect(User user);
 
+    void banUserByEmail(String email);
+
+
+    public long countBannedUsers() ;
+
+    public void sendEmail(String toEmail, String subject, String body);
+    public String generateVerificationCode();
+    public void sendVerificationCode(String toEmail);
+
+
+
 }

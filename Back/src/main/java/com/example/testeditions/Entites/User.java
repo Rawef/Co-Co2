@@ -28,10 +28,35 @@ public class User {
     private TypeRole role;
 
     private Boolean connected = false;
+    private boolean banned = false;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
     private List<Preferences> preferences;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
+    private List<ReservationCov> reservations;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AnnonceCov> annonceCov;
+
+
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Reclamation> Reclamations;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+    private List<Post> Posts;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+    private List<Subscription> subscriptions;
+
 
 
 

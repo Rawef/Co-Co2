@@ -7,15 +7,17 @@ import com.example.testeditions.Entites.User;
 import com.example.testeditions.Exception.UsernameAlreadyUsedException;
 import com.example.testeditions.Payload.Response.LoginMesage;
 import com.example.testeditions.Repositories.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserImpl implements UserService {
@@ -25,6 +27,9 @@ public class UserImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder; // Inject PasswordEncoder
+
+    @Autowired
+    private JavaMailSender emailSender;
 
     @Override
     public User getUserById(Long userId) {
@@ -66,6 +71,11 @@ public class UserImpl implements UserService {
         String msg = "";
         User user1 = userRepository.findByEmail(loginDTO.getEmail());
         if (user1 != null) {
+
+            if (user1.isBanned()) {
+                // Return null or an appropriate response to indicate that the user is banned
+                return null;
+            }
             String password = loginDTO.getPassword();
             String encodedPassword = user1.getPassword();
             Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
@@ -131,5 +141,53 @@ public class UserImpl implements UserService {
         return userRepository.save(dbUser);
     }
 
+    @Override
+    public void banUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            user.setBanned(true);
+            userRepository.save(user);
+        }
+
+    }
+
+    @Override
+    public long countBannedUsers() {
+        return userRepository.countByBannedTrue();    }
+
+
+
+    @Override
+    public void sendVerificationCode(String toEmail) {
+        String verificationCode = generateVerificationCode(); // Generate verification code
+        String subject = "Verification Code";
+        String body = "Your verification code is: " + verificationCode;
+
+        sendEmail(toEmail, subject, body);
+    }
+
+    @Override
+    public String generateVerificationCode() {
+        // Generate a random 6-digit verification code
+        Random random = new Random();
+        int code = 1000 + random.nextInt(9000);
+        return String.valueOf(code);
+    }
+
+    @Override
+    public void sendEmail(String toEmail, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("racem.messaoudi@gmail.com");
+        message.setTo(toEmail);
+        message.setSubject(subject);
+        message.setText(body);
+
+        emailSender.send(message);
+        System.out.println("Mail Sent successfully...");
+    }
 
 }
+
+
+

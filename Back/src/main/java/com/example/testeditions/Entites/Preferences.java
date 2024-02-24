@@ -22,7 +22,12 @@ public class Preferences {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "annoncecolocation_id")
+    private AnnonceColocation annoncecolocation;
+
     @ElementCollection
     private List<String> selectedTypes;
+
 
 }

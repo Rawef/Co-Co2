@@ -27,6 +27,7 @@ public class UserController {
     UserRepository userRepository;
 
 
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -44,10 +45,17 @@ public class UserController {
 
     }
 
+
     @PostMapping(path = "/save")
-    public User saveEmployee(@RequestBody UserDTO userDTO)
-    {
-        return userService.save(userDTO);
+    public User saveEmployee(@RequestBody UserDTO userDTO) {
+        // Save the user
+        User savedUser = userService.save(userDTO);
+
+        // Send verification code to the user's email
+        userService.sendVerificationCode(savedUser.getEmail());
+
+        // Return the saved user
+        return savedUser;
     }
 
     @PostMapping(path = "/login")
@@ -56,7 +64,15 @@ public class UserController {
         if (userDetailsDTO != null) {
             return ResponseEntity.ok(userDetailsDTO);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+            // Check if the user is banned
+            User user = userRepository.findByEmail(loginDTO.getEmail());
+            if (user != null && user.isBanned()) {
+                // Return 403 Forbidden status if the user is banned
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is banned");
+            } else {
+                // Return Unauthorized status for other login failures
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+            }
         }
     }
 
@@ -76,6 +92,28 @@ public class UserController {
     public Iterable<User> findConnectedUsers() {
         return userRepository.findAll();
     }
+
+    @PostMapping("/ban")
+    public ResponseEntity<?> banUserByEmail(@RequestParam("email") String email) {
+        // Ban the user using the service method
+        userService.banUserByEmail(email);
+
+        // Return a success response
+        return ResponseEntity.ok("User with email " + email + " has been banned.");
+    }
+
+    @GetMapping("/banned/count")
+    public long countBannedUsers() {
+        return userService.countBannedUsers();
+    }
+
+
+
+    @GetMapping("/all")
+    public long getAllUsers() {
+        return userRepository.count();
+    }
+
 
 
 }

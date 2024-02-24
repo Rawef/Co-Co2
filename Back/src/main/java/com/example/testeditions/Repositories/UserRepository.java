@@ -15,4 +15,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Transactional
     Long deleteByNom(String username);
+
+    long countByBannedTrue();
+
+    long count();
+
+
 }
