@@ -56,6 +56,34 @@
           
       </nav>
   </header>
+
+  <div *ngIf="scheduleData">
+    <h1>User Schedule</h1>
+    
+  </div>
+
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">pt.départ</th>
+        <th scope="col">Area</th>
+        <th scope="col">h.depart</th>
+        <th scope="col">h.retour</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let schedule of scheduleData">
+            <td>{{ schedule.day }}</td>
+            <td>{{ schedule.pointdedepart }}</td>
+            <td>{{ schedule.area }}</td>
+            <td>{{ schedule.heurededepart }}</td>
+            <td>{{ schedule.heurederetour }}</td>
+          </tr>
+    </tbody>
+  </table>
+  
   
     
   
