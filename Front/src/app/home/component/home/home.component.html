@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li class="card-med" id="serv-board">
-                        <div class="card-image"><a href="https://imgbb.com/"><img src="https://i.ibb.co/89c6fM4/transistor-man-traveling-by-car-with-dog.png" alt="transistor-man-traveling-by-car-with-dog" border="0"></a></div>
+                        <div class="card-image"><a [routerLink]="['/annonceCOV']"><img src="https://i.ibb.co/89c6fM4/transistor-man-traveling-by-car-with-dog.png" alt="transistor-man-traveling-by-car-with-dog" border="0"></a></div>
                         <a href="#">
                             <span>covoiturage</span>
                             <span>More Info<i class="bi bi-arrow-right"></i></span>
@@ -40,7 +40,12 @@
             <li>
                 <a href="#">About Us</a>
             </li>
-            
+            <li>
+              <a [routerLink]="['/voiture']">voitures</a>
+            </li>
+            <li>
+              <a [routerLink]="['/ajoutervoiture']">Ajouter une voiture</a>
+            </li>
 
         </ul>
         <div id="utility">

@@ -9,6 +9,9 @@ import { PreferancesComponent } from './login/component/preferances/preferances.
 import { ProfileComponent } from './login/component/profile/profile.component';
 import { UpdateComponent } from './login/component/update/update.component';
 import { ChatComponent } from './login/component/chat/chat.component';
+import { AnnonceComponent } from './covoiturage/components/annonce/annonce.component';
+import { AjoutervoitureComponent } from './covoiturage/components/ajoutervoiture/ajoutervoiture.component'; // Import the component for adding voiture
+import { VoitureComponent } from './covoiturage/components/voiture/voiture.component';
 
 
 const routes: Routes = [
@@ -18,6 +21,10 @@ const routes: Routes = [
   {path:"profile" , component:ProfileComponent},
   {path:"update" , component:UpdateComponent},
   {path:"chat" , component:ChatComponent},
+  {path:"annonceCOV" , component:AnnonceComponent},
+  { path: "ajoutervoiture", component: AjoutervoitureComponent }, // Add this line for adding voiture
+  {path:"voiture" , component:VoitureComponent},
+
   {path:"" , component:LoginComponent},
   {path:"preferances" , component:PreferancesComponent},
   {path:"**",redirectTo:"home" ,pathMatch:"full"} 

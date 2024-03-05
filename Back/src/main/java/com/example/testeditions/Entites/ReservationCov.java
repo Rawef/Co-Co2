@@ -1,5 +1,6 @@
 package com.example.testeditions.Entites;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,8 +29,8 @@ public class ReservationCov implements Serializable {
     @ManyToOne
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     private AnnonceCov annonceCov;
-
 
 }

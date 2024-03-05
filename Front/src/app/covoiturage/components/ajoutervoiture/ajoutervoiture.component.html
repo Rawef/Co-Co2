@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre titre ici</title>
+    <!-- Include CSS files and other necessary meta tags -->
+    <!-- Example: <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+
+<header>
+    <div class="banner">Bénéficiez d'une réduction de plus de 50%.</div>
+    
+    <nav>
+        <div id="logo">
+            <i class="bi bi-luggage-fill"></i>
+            Co&Co
+        </div>
+        <ul class="navigation-menu">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">À propos</a></li>
+            <!-- Add more navigation items as needed -->
+        </ul>
+    </nav>
+</header>
+
+<h2 class="d-flex justify-content-center m-5"> <i class="bi bi-car-front"></i>  Voiture </h2>
+
+<section class="cards-wrapper">
+    <div class="input-field">
+        <label for="nombrePlaces"><i class="fas fa-envelope"></i> Nombre de places :</label>
+        <input type="number" name="nombrePlaces" class="form-control" id="nombrePlaces" placeholder="Entrez le nombre de places">
+    </div>
+
+    <div class="input-field">
+        <label for="matricule"><i class="bi bi-envelope"></i> Matricule :</label>
+        <input type="text" name="matricule" class="form-control" id="matricule" placeholder="Entrez le matricule">
+    </div>
+      
+    <button class="btn btn-primary" (click)="registerVoiture()">Ajouter</button>
+</section>
+
+<!-- Include JavaScript files and other necessary scripts -->
+<!-- Example: <script src="scripts.js"></script> -->
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+
 @Entity
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class AnnonceCov implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ida")
+    @Column (name = "ida")
     private Long ida;
 
 
@@ -33,23 +34,26 @@ public class AnnonceCov implements Serializable {
     private int placesDisponibles;
     private int contact;
     private String status;
+    private String pointDepart;
+    private String pointArrivee;
+    private String pointStop;
+    private float distance;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    private Circuit circuit;
+
 
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "voiture_id")
     private Voiture voiture;
 
-
-
     @OneToMany(mappedBy = "annonceCov")
     private List<ReservationCov> reservations;
+
+
+
 }

@@ -25,7 +25,7 @@ public class Commentaire implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+     @ManyToOne
     @JoinColumn(name = "annoncecov_id")
     private AnnonceCov annonceCov;
 
