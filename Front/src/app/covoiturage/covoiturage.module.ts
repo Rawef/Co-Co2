@@ -1,27 +1,40 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { AnnonceComponent } from './components/annonce/annonce.component';
 import { AjouterannonceComponent } from './components/ajouterannonce/ajouterannonce.component';
-import { AjoutervoitureComponent } from './components/ajoutervoiture/ajoutervoiture.component';
 import { VoitureComponent } from './components/voiture/voiture.component';
-
-
+import { AjoutervoitureComponent } from './components/ajoutervoiture/ajoutervoiture.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { DetailedAnnonceComponent } from './components/detailed-annonce/detailed-annonce.component';
+import { MesannoncesComponent } from './components/mesannonces/mesannonces.component';
+import { AjoutercommentaireComponent } from './components/ajoutercommentaire/ajoutercommentaire.component';
 
 @NgModule({
   declarations: [
     AnnonceComponent,
     AjouterannonceComponent,
+    VoitureComponent,
     AjoutervoitureComponent,
-    VoitureComponent
+    MesannoncesComponent,
+    AjoutercommentaireComponent,
+    DetailedAnnonceComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   exports:[
     AnnonceComponent,
     AjouterannonceComponent,
+    VoitureComponent,
     AjoutervoitureComponent,
-    VoitureComponent
-  ]
+    MesannoncesComponent,
+    DetailedAnnonceComponent
+  ],
+
 })
 export class CovoiturageModule { }

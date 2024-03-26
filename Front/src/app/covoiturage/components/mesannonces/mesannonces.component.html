@@ -57,23 +57,23 @@
 
 
 
-<h2 class="d-flex justify-content-center m-5"> <i class="bi bi-car-front"></i>  Voiture </h2>
+<h2 class="d-flex justify-content-center m-5"> <i class="bi bi-car-front"></i>  annonce </h2>
 
 <section class="cards-wrapper">
 
-    <div *ngIf="voitures && voitures.length > 0">
+    <div *ngIf="annonces && annonces.length > 0">
 
-    <div class="card-grid-space" *ngFor="let voiture of voitures">
+    <div class="card-grid-space" *ngFor="let annonce of annonces">
      
-      <a class="card" href="https://codetheweb.blog/2017/10/06/html-syntax/"[style.backgroundImage]="'url(' + voiture.img + ')'">
+      <a class="card" href="https://codetheweb.blog/2017/10/06/html-syntax/"[style.backgroundImage]="'url(' + annonce.image + ')'">
         <div>
-          <h1>{{voiture.nombrePlaces}}</h1>
-          <p>{{voiture.matricule}}</p>
+          <h1>{{annonce.titre}}</h1>
+          <p>{{annonce.placesDisponibles}}</p>
           
             
         </div>
-        <div *ngIf="voitures && voitures.length === 0">
-          <p>No voitures found for the current user.</p>
+        <div *ngIf="annonces && annonces.length === 0">
+          <p>No annonce found for the current user.</p>
         </div>          
       </a>
     </div>    </div>

@@ -13,18 +13,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AnnonceCovImpl implements AnnonceCovService{
+public class AnnonceCovImpl implements AnnonceCovService {
 
     @Autowired
     private AnnonceCovRepository annonceCovRepository;
 
     @Autowired
-    private VoitureRepository voitureRepository;
+    private VoitureService voitureService;
 
     @Autowired
-    private CircuitRepository circuitRepository;
+    UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    VoitureRepository voitureRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<AnnonceCov> getAllAnnonces() {
@@ -42,11 +46,10 @@ public class AnnonceCovImpl implements AnnonceCovService{
 
         User user = annonceCov.getUser();
         Voiture voiture = annonceCov.getVoiture();
-        Circuit circuit = annonceCov.getCircuit();
 
 
-        if (user == null || voiture == null || circuit ==null) {
-            throw new RuntimeException("User or Voiture or circuit null");
+        if (user == null || voiture == null ) {
+            throw new RuntimeException("User or Voiture  null");
         }
 
 
@@ -57,12 +60,12 @@ public class AnnonceCovImpl implements AnnonceCovService{
     }
 
 
-
     @Override
     public AnnonceCov updateAnnonce(Long ida, AnnonceCov updatedAnnonceCov) {
         Optional<AnnonceCov> annonceCovOptional = annonceCovRepository.findById(ida);
+        AnnonceCov existingAnnonceCov = null;
         if (annonceCovOptional.isPresent()) {
-            AnnonceCov existingAnnonceCov = annonceCovOptional.get();
+            existingAnnonceCov = annonceCovOptional.get();
             existingAnnonceCov.setTitre(updatedAnnonceCov.getTitre());
             existingAnnonceCov.setDescription(updatedAnnonceCov.getDescription());
             existingAnnonceCov.setImage(updatedAnnonceCov.getImage());
@@ -71,22 +74,50 @@ public class AnnonceCovImpl implements AnnonceCovService{
             existingAnnonceCov.setPlacesDisponibles(updatedAnnonceCov.getPlacesDisponibles());
             existingAnnonceCov.setStatus(updatedAnnonceCov.getStatus());
 
-            Circuit updatedCircuit = updatedAnnonceCov.getCircuit();
-            if (updatedCircuit != null) {
-                Circuit existingCircuit = existingAnnonceCov.getCircuit();
-                existingCircuit.setPointDepart(updatedCircuit.getPointDepart());
-                existingCircuit.setPointArrivee(updatedCircuit.getPointArrivee());
-                existingCircuit.setPointStop(updatedCircuit.getPointStop());
-                existingCircuit.setDistance(updatedCircuit.getDistance());
-            }
 
-            return annonceCovRepository.save(existingAnnonceCov);
+            existingAnnonceCov.setPointDepart(updatedAnnonceCov.getPointDepart());
+            existingAnnonceCov.setPointArrivee(updatedAnnonceCov.getPointArrivee());
+            existingAnnonceCov.setPointStop(updatedAnnonceCov.getPointStop());
+            existingAnnonceCov.setDistance(updatedAnnonceCov.getDistance());
         }
-        return null;
+
+        return annonceCovRepository.save(existingAnnonceCov);
     }
+
+
 
     @Override
     public void deleteAnnonce(Long ida) {
         annonceCovRepository.deleteById(ida);
     }
+
+    @Override
+    public AnnonceCov saveAnnonce(Long userId, String matricule, AnnonceCov annonceCov) {
+        User user = userService.getUserById(userId);
+        Voiture voiture= voitureService.getVoitureByMatricule(matricule);
+        annonceCov.setUser(user);
+        annonceCov.setVoiture(voiture);
+        return annonceCovRepository.save(annonceCov);
+    }
+
+    @Override
+    public List<AnnonceCov> getAnnonceByUser(User user) {
+        return annonceCovRepository.findByUser(user);
+    }
+
+    @Override
+    public AnnonceCov addAnnonceCov(Long userId, String matricule, AnnonceCov annonceCov) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Voiture voiture = voitureRepository.findByUserAndMatricule(user, matricule)
+                .orElseThrow(() -> new IllegalArgumentException("User does not own a car with this matricule"));
+
+        annonceCov.setUser(user);
+        annonceCov.setVoiture(voiture);
+        return annonceCovRepository.save(annonceCov);
+    }
+
+
+
 }

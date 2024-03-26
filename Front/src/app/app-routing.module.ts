@@ -10,8 +10,11 @@ import { ProfileComponent } from './login/component/profile/profile.component';
 import { UpdateComponent } from './login/component/update/update.component';
 import { ChatComponent } from './login/component/chat/chat.component';
 import { AnnonceComponent } from './covoiturage/components/annonce/annonce.component';
-import { AjoutervoitureComponent } from './covoiturage/components/ajoutervoiture/ajoutervoiture.component'; // Import the component for adding voiture
 import { VoitureComponent } from './covoiturage/components/voiture/voiture.component';
+import { AjoutervoitureComponent } from './covoiturage/components/ajoutervoiture/ajoutervoiture.component';
+import { AjouterannonceComponent } from './covoiturage/components/ajouterannonce/ajouterannonce.component';
+import { DetailedAnnonceComponent } from './covoiturage/components/detailed-annonce/detailed-annonce.component';
+import { MesannoncesComponent } from './covoiturage/components/mesannonces/mesannonces.component';
 
 
 const routes: Routes = [
@@ -22,8 +25,15 @@ const routes: Routes = [
   {path:"update" , component:UpdateComponent},
   {path:"chat" , component:ChatComponent},
   {path:"annonceCOV" , component:AnnonceComponent},
-  { path: "ajoutervoiture", component: AjoutervoitureComponent }, // Add this line for adding voiture
   {path:"voiture" , component:VoitureComponent},
+  {path:"ajoutervoiture" , component:AjoutervoitureComponent},
+  {path:"ajouterannonce" , component:AjouterannonceComponent},
+  { path: 'annonces/:ida', component: DetailedAnnonceComponent },
+  { path: "annonces", component: MesannoncesComponent },
+  
+
+
+
 
   {path:"" , component:LoginComponent},
   {path:"preferances" , component:PreferancesComponent},

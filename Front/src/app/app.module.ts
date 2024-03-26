@@ -15,6 +15,7 @@ import { LoginModule } from './login/login.module';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { SocketService } from './socket.service';
 import { CovoiturageModule } from './covoiturage/covoiturage.module';
+import { DetailedAnnonceComponent } from './covoiturage/components/detailed-annonce/detailed-annonce.component';
 
 
 const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
@@ -24,6 +25,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
 @NgModule({
   declarations: [
     AppComponent,
+   
     
     
   ],
@@ -36,8 +38,9 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
     FormsModule,
     HomeModule,
     LoginModule,
-    SocketIoModule.forRoot(config),
     CovoiturageModule,
+    SocketIoModule.forRoot(config),
+ 
     
     
     

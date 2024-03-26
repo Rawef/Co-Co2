@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './component/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';  // Import ReactiveFormsModule
+import { ReactiveFormsModule } from '@angular/forms';  
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -10,6 +10,7 @@ import { PreferancesComponent } from './component/preferances/preferances.compon
 import { ProfileComponent } from './component/profile/profile.component';
 import { UpdateComponent } from './component/update/update.component';
 import { ChatComponent } from './component/chat/chat.component';
+import { CovoiturageModule } from '../covoiturage/covoiturage.module';
 
 
 
@@ -22,6 +23,7 @@ import { ChatComponent } from './component/chat/chat.component';
     UpdateComponent,
     ChatComponent,
     
+    
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import { ChatComponent } from './component/chat/chat.component';
     RouterModule,
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    CovoiturageModule
     
   ],
   exports:[
@@ -37,6 +40,7 @@ import { ChatComponent } from './component/chat/chat.component';
     PreferancesComponent,
     ProfileComponent,
     UpdateComponent,
+    CovoiturageModule,
   ]
 })
 export class LoginModule { }

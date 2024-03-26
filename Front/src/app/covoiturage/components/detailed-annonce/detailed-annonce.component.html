@@ -37,7 +37,6 @@
             <li>
                 <a href="#">About Us</a>
             </li>
-            
 
         </ul>
         <div id="utility">
@@ -57,25 +56,45 @@
 
 
 
-<h2 class="d-flex justify-content-center m-5"> <i class="bi bi-car-front"></i>  Voiture </h2>
 
-<section class="cards-wrapper">
-
-    <div *ngIf="voitures && voitures.length > 0">
-
-    <div class="card-grid-space" *ngFor="let voiture of voitures">
-     
-      <a class="card" href="https://codetheweb.blog/2017/10/06/html-syntax/"[style.backgroundImage]="'url(' + voiture.img + ')'">
-        <div>
-          <h1>{{voiture.nombrePlaces}}</h1>
-          <p>{{voiture.matricule}}</p>
-          
-            
-        </div>
-        <div *ngIf="voitures && voitures.length === 0">
-          <p>No voitures found for the current user.</p>
-        </div>          
-      </a>
-    </div>    </div>
-
-</section>
+<div class="container">
+  <!-- Announcement details -->
+  <section *ngIf="annonce">
+      <h2>{{ annonce?.titre }}</h2>
+      <div>
+          <p>Description: {{ annonce?.description }}</p>
+          <p>Image: <img [src]="annonce?.image" alt="Announcement Image"></p>
+          <p>Price: {{ annonce?.prix }}</p>
+          <p>Available Seats: {{ annonce?.placesDisponibles }}</p>
+          <p>Contact: {{ annonce?.contact }}</p>
+          <p>Status: {{ annonce?.status }}</p>
+          <p>Departure Point: {{ annonce?.pointDepart }}</p>
+          <p>Arrival Point: {{ annonce?.pointArrivee }}</p>
+          <p>Stop Point: {{ annonce?.pointStop }}</p>
+          <p>Distance: {{ annonce?.distance }}</p>
+      </div>
+  </section>
+  
+  <!-- Add Comment form -->
+  <section>
+      <h3>Add Comment</h3>
+      <form (ngSubmit)="submitComment()">
+          <label for="commentText">Your Comment:</label>
+          <textarea id="commentText" [(ngModel)]="commentText" name="commentText" placeholder="Enter your comment"></textarea>
+          <button type="submit">Submit</button>
+      </form>
+  </section>
+  
+  <!-- Comments Section -->
+  <section *ngIf="comments && comments.length">
+      <h3>Comments</h3>
+      <div *ngFor="let comment of comments" class="comment">
+          <article>
+              <p>{{ comment.comments }}</p>
+              <div class="reaction-buttons">
+                  <!-- You can add reaction buttons here if needed -->
+              </div>
+          </article>
+      </div>
+  </section>
+</div>

@@ -1,6 +1,8 @@
 package com.example.testeditions.Services;
 
 import com.example.testeditions.Entites.Commentaire;
+import com.example.testeditions.Entites.User;
+import com.example.testeditions.Entites.Voiture;
 import com.example.testeditions.Repositories.CommentaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class CommentaireImpl implements CommentaireService {
     }
 
     @Override
+    public List<Commentaire> getCommentsByUser(User user) {
+        return commentaireRepository.findByUser(user);
+    }
+    @Override
     public Commentaire saveCommentaire(Commentaire commentaire) {
         return commentaireRepository.save(commentaire);
     }
@@ -47,6 +53,11 @@ public class CommentaireImpl implements CommentaireService {
             throw new RuntimeException("Circuit with id " + idco + " not found.");
         }
         commentaireRepository.deleteById(idco);
+    }
+
+    @Override
+    public List<Commentaire> getCommentsByAnnonceCovId(Long annonceCovId) {
+        return commentaireRepository.findByAnnonceCov_Ida(annonceCovId);
     }
 
     }

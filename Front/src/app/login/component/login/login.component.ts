@@ -86,7 +86,7 @@ export class LoginComponent   {
     } else {
       alert("Password is not strong enough. Please choose a stronger password.");
     }
-  }
+  };
 
   isPasswordStrong(): boolean {
     // Add your password strength criteria here

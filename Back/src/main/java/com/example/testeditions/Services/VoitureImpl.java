@@ -1,10 +1,17 @@
 package com.example.testeditions.Services;
 
+import com.example.testeditions.Entites.AnnonceCov;
 import com.example.testeditions.Entites.User;
 import com.example.testeditions.Entites.Voiture;
 import com.example.testeditions.Repositories.VoitureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +24,7 @@ public class VoitureImpl implements VoitureService{
 
     @Autowired
     UserService userService;
+
 
 
     @Override
@@ -56,4 +64,20 @@ public class VoitureImpl implements VoitureService{
     public void deleteVoiture(Long idv) {
         voitureRepository.deleteById(idv);
     }
+
+    @Override
+    public List<Voiture> getVoituresByUser(User user) {
+        return voitureRepository.findByUser(user);
+    }
+
+    @Override
+    public Voiture getVoitureByMatricule(String matricule) {
+        return voitureRepository.findByMatricule(matricule);
+    }
+
+    @Override
+    public Voiture getVoitureByUserAndMatricule(User user, String matricule) {
+        return voitureRepository.findByUserAndMatricule(user, matricule).orElse(null);
+    }
 }
+
