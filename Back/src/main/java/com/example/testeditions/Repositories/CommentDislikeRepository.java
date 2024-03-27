@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentDislikeRepository extends JpaRepository<CommentDislike,Long > {
+    CommentDislike findByCommentaireIdcoAndUserId(Long idco, Long userId);
+
 }

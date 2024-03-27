@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AnnonceService } from '../../service/annonce.service';
 import { ServiceService } from '../../../login/services/service.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-detailed-annonce',
@@ -13,7 +14,7 @@ export class DetailedAnnonceComponent implements OnInit {
   comments: any[] = [];
   commentText: string = '';
   replyText: string = '';
- 
+  loggedInUserId: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,7 +24,11 @@ export class DetailedAnnonceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAnnonceDetails();
-
+    this.userService.getLoggedInUser().subscribe((user: any) => {
+      if (user) {
+        this.loggedInUserId = user.id; 
+      } else {        // For example, redirect to the login page
+        }      });
   }
 
   
@@ -35,7 +40,6 @@ export class DetailedAnnonceComponent implements OnInit {
       this.annonceService.getAnnonceById(ida).subscribe(
         (annonce: any) => {
           this.annonce = annonce;
-          // Fetch comments for the current announcement
           this.fetchComments();
         },
         error => {
@@ -52,11 +56,8 @@ export class DetailedAnnonceComponent implements OnInit {
       (user: any) => {
         const userId = user.id;
         const annonceCovId = this.annonce.ida;
-        // Add comment
         this.annonceService.addComment(annonceCovId, userId, this.commentText).subscribe(() => {
-          // After adding comment, refresh comments
           this.fetchComments();
-          // Reset comment text
           this.commentText = '';
         });
       }
@@ -71,38 +72,72 @@ export class DetailedAnnonceComponent implements OnInit {
       });
     }
   }
-  likeComment(commentId: number): void {
+
+  deleteComment(commentUserId: number, idco: number): void {
+    // Get the logged-in user
+    this.userService.getLoggedInUser().subscribe(
+      (loggedInUser: any) => {
+        if (loggedInUser) {
+          const userId = loggedInUser.id;
+          // Proceed with deletion
+          this.annonceService.deleteCommentByUserIdAndIdco(userId, idco).subscribe(
+            (response) => {
+              console.log('Delete comment response:', response);
+              // Remove the comment from the local array upon successful deletion
+              this.comments = this.comments.filter(comment => comment.idco !== idco);
+            },
+            (error) => {
+              console.error('Error deleting comment:', error);
+              // Handle error, if necessary
+            }
+          );
+        } else {
+          console.error('User is not logged in.');
+          // Handle the case where the user is not logged in, if necessary
+        }
+      },
+      (error) => {
+        console.error('Error retrieving logged-in user:', error);
+        // Handle error, if necessary
+      }
+    );
+  }
+  
+  isCommentOwner(commentUserId: number): boolean {
+    return this.loggedInUserId === commentUserId;
+  }
+
+  likeComment(idco: number): void {
     this.userService.getLoggedInUser().subscribe((user: any) => {
       const userId = user.id;
-      this.annonceService.likeComment(commentId, userId).subscribe(() => {
-        // Update total likes after successful like
-        this.updateLikesDislikes(commentId);
+      this.annonceService.likeComment(idco, userId).subscribe(() => {
+        // Update likes for the specific comment
+        this.updateLikesDislikes(idco);
       }, (error) => {
         console.error('Error liking comment:', error);
-        // Handle error (e.g., display an error message)
+        // Handle error, if necessary
       });
     }, (error) => {
       console.error('Error retrieving user information:', error);
-      // Handle error (e.g., display an error message)
+      // Handle error, if necessary
     });
   }
   
-  dislikeComment(commentId: number): void {
+  dislikeComment(idco: number): void {
     this.userService.getLoggedInUser().subscribe((user: any) => {
       const userId = user.id;
-      this.annonceService.dislikeComment(commentId, userId).subscribe(() => {
-        // Update total dislikes after successful dislike
-        this.updateLikesDislikes(commentId);
+      this.annonceService.dislikeComment(idco, userId).subscribe(() => {
+        // Update dislikes for the specific comment
+        this.updateLikesDislikes(idco);
       }, (error) => {
         console.error('Error disliking comment:', error);
-        // Handle error (e.g., display an error message)
+        // Handle error, if necessary
       });
     }, (error) => {
       console.error('Error retrieving user information:', error);
-      // Handle error (e.g., display an error message)
+      // Handle error, if necessary
     });
   }
-  
 
   updateLikesDislikes(commentId: number): void {
     this.annonceService.getLikesForComment(commentId).subscribe((likes: number) => {

@@ -101,14 +101,13 @@
     <div class="form-group">
       <label for="distance">Distance:</label>
       <input type="number" class="form-control" id="distance" formControlName="distance" autocomplete="off">
+      <div class="form-group">
+        <label for="matricule">Choose a Voiture</label>
+        <select class="form-control" id="matricule" formControlName="matricule" (change)="onChangeVoiture($event)">
+          <option *ngFor="let voiture of voitures" [value]="voiture">{{ voiture }}</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="voiture">Choose a Voiture</label>
-      <select class="form-control" id="matricule" (change)="onChangeVoiture($event)">
-        <option *ngFor="let matricule of voitures" [value]="matricule">{{ matricule }}</option>
-      </select>
-    </div>
-    
     
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>

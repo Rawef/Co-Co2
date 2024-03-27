@@ -29,7 +29,7 @@ export class AnnonceService {
     registerAnnonce(annonce: any):Observable<any> {
       const{userId}=annonce;
       const{matricule}=annonce;
-      return this.http.post(`${this.baseUrl}/voitures/add-voiture/${userId}/${matricule}`, annonce);
+      return this.http.post(`${this.baseUrl}/voitures/add/${userId}/${matricule}`, annonce);
     }
 
     afficherannonces(userId: number): Observable<any> {
@@ -40,7 +40,7 @@ export class AnnonceService {
             return throwError('An error occurred while fetching user annonces.');
           })
         );}
-
+        
     
 
     getVoitureByMatricule(matricule: string): Observable<any> {
@@ -87,12 +87,24 @@ export class AnnonceService {
         return this.http.get<any[]>(`${this.baseUrl}/commentaires/annonce/${annonceCovId}`);
       }
 
-      likeComment(idco: number, userId: number): Observable<any> {
-        return this.http.post(`${this.baseUrl}/commentaires/like/${idco}/${userId}`, {});
+      likeComment(commentId: number, userId: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}/commentaires/like/${commentId}/${userId}`, {})
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('An error occurred while liking comment:', error);
+              return throwError('Failed to like comment.');
+            })
+          );
       }
-    
-      dislikeComment(idco: number, userId: number): Observable<any> {
-        return this.http.post(`${this.baseUrl}/commentaires/dislike/${idco}/${userId}`, {});
+      
+      dislikeComment(commentId: number, userId: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}/commentaires/dislike/${commentId}/${userId}`, {})
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('An error occurred while disliking comment:', error);
+              return throwError('Failed to dislike comment.');
+            })
+          );
       }
     
       getLikesForComment(idco: number): Observable<number> {
@@ -111,7 +123,18 @@ export class AnnonceService {
         return this.http.get(`${this.baseUrl}/voitures/${userId}/${matricule}`);
       }
     
-      addAnnonceCov(userId: number, matricule: string, annonceCov: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}/annonces/add/${userId}/${matricule}`, annonceCov);
+      addAnnonceCov(userId: number, matricule: string, formData: any): Observable<any> {
+        return this.http.post(`${this.baseUrl}/annonces/add/${userId}/${matricule}`, formData);
       }
+
+      deleteCommentByUserIdAndIdco(userId: number, idco: number): Observable<any> {
+        return this.http.delete<any>(`${this.baseUrl}/commentaires/delete/${userId}/${idco}`)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('An error occurred while deleting comment:', error);
+              return throwError('Failed to delete comment.');
+            })
+          );
+      }
+
 }

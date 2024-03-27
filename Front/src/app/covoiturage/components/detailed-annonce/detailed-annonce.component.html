@@ -57,44 +57,57 @@
 
 
 
+<!-- Detailed Announcement Section -->
 <div class="container">
-  <!-- Announcement details -->
-  <section *ngIf="annonce">
-      <h2>{{ annonce?.titre }}</h2>
-      <div>
-          <p>Description: {{ annonce?.description }}</p>
-          <p>Image: <img [src]="annonce?.image" alt="Announcement Image"></p>
-          <p>Price: {{ annonce?.prix }}</p>
-          <p>Available Seats: {{ annonce?.placesDisponibles }}</p>
-          <p>Contact: {{ annonce?.contact }}</p>
-          <p>Status: {{ annonce?.status }}</p>
-          <p>Departure Point: {{ annonce?.pointDepart }}</p>
-          <p>Arrival Point: {{ annonce?.pointArrivee }}</p>
-          <p>Stop Point: {{ annonce?.pointStop }}</p>
-          <p>Distance: {{ annonce?.distance }}</p>
-      </div>
-  </section>
-  
-  <!-- Add Comment form -->
-  <section>
-      <h3>Add Comment</h3>
-      <form (ngSubmit)="submitComment()">
-          <label for="commentText">Your Comment:</label>
-          <textarea id="commentText" [(ngModel)]="commentText" name="commentText" placeholder="Enter your comment"></textarea>
-          <button type="submit">Submit</button>
-      </form>
-  </section>
-  
-  <!-- Comments Section -->
-  <section *ngIf="comments && comments.length">
-      <h3>Comments</h3>
-      <div *ngFor="let comment of comments" class="comment">
-          <article>
-              <p>{{ comment.comments }}</p>
-              <div class="reaction-buttons">
-                  <!-- You can add reaction buttons here if needed -->
-              </div>
-          </article>
-      </div>
-  </section>
+    <section *ngIf="annonce">
+        <h2>{{ annonce?.titre }}</h2>
+        <div class="announcement-details">
+            <div class="announcement-image">
+                <img [src]="annonce?.image" alt="Announcement Image">
+            </div>
+            <div class="announcement-info">
+                <p><strong>Description:</strong> {{ annonce?.description }}</p>
+                <p><strong>Price:</strong> {{ annonce?.prix }}</p>
+                <p><strong>Available Seats:</strong> {{ annonce?.placesDisponibles }}</p>
+                <p><strong>Contact:</strong> {{ annonce?.contact }}</p>
+                <p><strong>Status:</strong> {{ annonce?.status }}</p>
+                <p><strong>Departure Point:</strong> {{ annonce?.pointDepart }}</p>
+                <p><strong>Arrival Point:</strong> {{ annonce?.pointArrivee }}</p>
+                <p><strong>Stop Point:</strong> {{ annonce?.pointStop }}</p>
+                <p><strong>Distance:</strong> {{ annonce?.distance }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Comment Section -->
+    <section>
+        <h3>Add Comment</h3>
+        <form (ngSubmit)="submitComment()">
+            <label for="commentText">Your Comment:</label>
+            <textarea id="commentText" [(ngModel)]="commentText" name="commentText" placeholder="Enter your comment"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <!-- Comments Section -->
+    <section *ngIf="comments && comments.length">
+        <h3>Comments</h3>
+        <div *ngFor="let comment of comments" class="comment">
+            <article>
+                <div class="comment-info">
+                    <span>Posted by: {{ comment.user.nom }}</span>
+                </div>
+                <p>{{ comment.comments }}</p>
+                <div class="comment-actions" *ngIf="isCommentOwner(comment.user.id)">
+                    <a href="javascript:void(0)" (click)="deleteComment(comment.user.id, comment.idco)">Delete</a>
+                </div>
+                <div class="reaction-buttons">
+                    <button (click)="likeComment(comment.idco)">Like</button>
+                    <span>Likes: {{ comment.likes }}</span>
+                    <button (click)="dislikeComment(comment.idco)">Dislike</button>
+                    <span>Dislikes: {{ comment.dislikes }}</span>
+                </div>
+            </article>
+        </div>
+    </section>
 </div>

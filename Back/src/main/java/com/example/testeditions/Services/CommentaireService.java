@@ -17,6 +17,10 @@ public interface CommentaireService {
 
     List<Commentaire> getCommentsByAnnonceCovId(Long annonceCovId);
 
+    boolean  deleteCommentaireByUserIdAndIdco(Long userId, Long idco);
+
+    Commentaire likeComment(Long idco, Long userId);
+    Commentaire dislikeComment(Long idco, Long userId);
 
 
 }

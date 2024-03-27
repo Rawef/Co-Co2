@@ -1,9 +1,11 @@
 package com.example.testeditions.Services;
 
-import com.example.testeditions.Entites.Commentaire;
-import com.example.testeditions.Entites.User;
-import com.example.testeditions.Entites.Voiture;
+import com.example.testeditions.Entites.*;
+import com.example.testeditions.Repositories.CommentDislikeRepository;
+import com.example.testeditions.Repositories.CommentLikeRepository;
 import com.example.testeditions.Repositories.CommentaireRepository;
+import com.example.testeditions.Repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,14 @@ public class CommentaireImpl implements CommentaireService {
 
     @Autowired
     private CommentaireRepository commentaireRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CommentLikeRepository commentLikeRepository;
+
+    @Autowired
+    private CommentDislikeRepository commentDislikeRepository;
 
     @Override
     public List<Commentaire> getAllCommentaires() {
@@ -50,7 +60,7 @@ public class CommentaireImpl implements CommentaireService {
     public void deleteCommentaire(Long idco) {
 
         if (!commentaireRepository.existsById(idco)) {
-            throw new RuntimeException("Circuit with id " + idco + " not found.");
+            throw new RuntimeException("Commentaire with id " + idco + " not found.");
         }
         commentaireRepository.deleteById(idco);
     }
@@ -60,7 +70,98 @@ public class CommentaireImpl implements CommentaireService {
         return commentaireRepository.findByAnnonceCov_Ida(annonceCovId);
     }
 
+    @Override
+    public boolean deleteCommentaireByUserIdAndIdco(Long userId, Long idco) {
+        Commentaire commentaire = commentaireRepository.findByUserIdAndIdco(userId, idco);
+        if (commentaire != null) {
+            commentaireRepository.delete(commentaire);
+            return true; // Comment found and deleted successfully
+        } else {
+            return false; // Comment not found or deletion failed
+        }
     }
+
+
+
+    @Override
+    public Commentaire likeComment(Long commentId, Long userId) {
+        // Get the comment from the repository
+        Commentaire commentaire = commentaireRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + commentId));
+
+        // Get the user from the repository
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Check if the user has already liked the comment
+        boolean alreadyLiked = commentaire.getLikes().stream()
+                .anyMatch(like -> like.getUser().getId().equals(userId));
+
+        // Check if the user has already disliked the comment
+        boolean alreadyDisliked = commentaire.getDislikes().stream()
+                .anyMatch(dislike -> dislike.getUser().getId().equals(userId));
+
+        if (alreadyLiked) {
+            // User has already liked the comment, so remove the like
+            commentaire.getLikes().removeIf(like -> like.getUser().getId().equals(userId));
+        } else {
+            // User has not liked the comment
+            if (!alreadyDisliked) {
+                // If the user has not disliked the comment, add the like
+                commentaire.getLikes().add(new CommentLike(commentaire, user));
+            } else {
+                // If the user has disliked the comment, remove the dislike and add the like
+                commentaire.getDislikes().removeIf(dislike -> dislike.getUser().getId().equals(userId));
+                commentaire.getLikes().add(new CommentLike(commentaire, user));
+            }
+        }
+
+        // Save the updated comment
+        return commentaireRepository.save(commentaire);
+    }
+
+    @Override
+    public Commentaire dislikeComment(Long commentId, Long userId) {
+        // Get the comment from the repository
+        Commentaire commentaire = commentaireRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + commentId));
+
+        // Get the user from the repository
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Check if the user has already disliked the comment
+        boolean alreadyDisliked = commentaire.getDislikes().stream()
+                .anyMatch(dislike -> dislike.getUser().getId().equals(userId));
+
+        // Check if the user has already liked the comment
+        boolean alreadyLiked = commentaire.getLikes().stream()
+                .anyMatch(like -> like.getUser().getId().equals(userId));
+
+        if (alreadyDisliked) {
+            // User has already disliked the comment, so remove the dislike
+            commentaire.getDislikes().removeIf(dislike -> dislike.getUser().getId().equals(userId));
+        } else {
+            // User has not disliked the comment
+            if (!alreadyLiked) {
+                // If the user has not liked the comment, add the dislike
+                commentaire.getDislikes().add(new CommentDislike(commentaire, user));
+            } else {
+                // If the user has liked the comment, remove the like and add the dislike
+                commentaire.getLikes().removeIf(like -> like.getUser().getId().equals(userId));
+                commentaire.getDislikes().add(new CommentDislike(commentaire, user));
+            }
+        }
+
+        // Save the updated comment
+        return commentaireRepository.save(commentaire);
+    }
+
+
+}
+
+
+
 
 
 

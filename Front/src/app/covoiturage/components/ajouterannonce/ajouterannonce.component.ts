@@ -41,17 +41,17 @@ export class AjouterannonceComponent implements OnInit {
 
   loadUserVoitures() {
     const userId = this.userService.getLoggedInUserId();
-    console.log('User ID:', userId); // Check if user ID is retrieved correctly
+    console.log('User ID:', userId); 
     if (userId) {
       this.annonceService.affichervoiture(userId)
         .subscribe(
           (matricules: string[]) => {
-            console.log('Matricules received:', matricules); // Check the matricules received from the service
+            console.log('Matricules received:', matricules); 
             this.voitures = matricules;
           },
           (error) => {
             console.error('Error fetching user voitures:', error);
-            // Handle error if needed
+          
           }
         );
     }
@@ -60,7 +60,19 @@ export class AjouterannonceComponent implements OnInit {
 
   onChangeVoiture(event: any) {
     const selectedMatricule = event.target.value;
-    this.selectedVoiture = this.voitures.find(voiture => voiture.matricule === selectedMatricule);
+    console.log('Selected matricule:', selectedMatricule); 
+    // Call the service function to get the voiture based on user ID and matricule
+    this.annonceService.getUserVoitureByMatricule(this.userService.getLoggedInUserId(), selectedMatricule)
+      .subscribe(
+        (voiture: any) => {
+          console.log('Selected voiture:', voiture);
+          this.selectedVoiture = voiture; // Assign the retrieved voiture to selectedVoiture
+        },
+        (error) => {
+          console.error('Error fetching voiture:', error);
+          // Handle error if needed
+        }
+      );
   }
   
   
@@ -81,8 +93,7 @@ export class AjouterannonceComponent implements OnInit {
         (result: any) => {
           console.log(result);
           alert("Annonce added successfully");
-          // Redirect to home page or wherever you need
-          this.router.navigateByUrl('/home');
+          this.router.navigateByUrl('/annonceCOV');
         },
         (error) => {
           console.error("Error adding annonce:", error);

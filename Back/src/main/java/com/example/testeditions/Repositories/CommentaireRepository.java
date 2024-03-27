@@ -19,6 +19,10 @@ public interface CommentaireRepository extends JpaRepository<Commentaire,Long > 
     @Query("SELECT SUM(c.dislikes) FROM Commentaire c WHERE c.idco = :idco")
     int getDislikesForComment(@Param("idco") Long idco);
     List<Commentaire> findByUser(User user);
-
+    void deleteByUserIdAndIdco(Long userId, Long idco);
+    Commentaire findByUserIdAndIdco(Long userId, Long idco);
     List<Commentaire> findByAnnonceCov_Ida(Long annonceCovId);
+
+
+
 }

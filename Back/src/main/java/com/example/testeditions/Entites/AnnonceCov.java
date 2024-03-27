@@ -47,7 +47,7 @@
 
 
         @JsonIgnore
-        @OneToOne
+        @ManyToOne
         @JoinColumn(name = "voiture_id")
         private Voiture voiture;
 

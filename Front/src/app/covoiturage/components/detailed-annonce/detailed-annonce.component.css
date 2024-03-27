@@ -4,6 +4,86 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,500,300,700);
 @import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Sumana:wght@700&display=swap");
+
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  
+  /* Detailed Announcement Section Styles */
+  .announcement-details {
+    display: flex;
+    align-items: center;
+  }
+  
+  .announcement-image img {
+    max-width: 300px;
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .announcement-info {
+    flex: 1;
+  }
+  
+  /* Add Comment Section Styles */
+  section form {
+    margin-bottom: 20px;
+  }
+  
+  section form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  section form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+  }
+  
+  section form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  section form button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Comments Section Styles */
+  .comment {
+    margin-bottom: 20px;
+  }
+  
+  .comment p {
+    margin-bottom: 10px;
+  }
+  
+  .reaction-buttons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .reaction-buttons button {
+    background-color: transparent;
+    border: none;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .reaction-buttons button:hover {
+    text-decoration: underline;
+  }
+
+
 :root {
     --text-01: #45413E;
     --light-01: #F9F9F9;

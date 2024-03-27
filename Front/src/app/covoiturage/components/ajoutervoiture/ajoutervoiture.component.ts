@@ -21,6 +21,8 @@ export class AjoutervoitureComponent implements OnInit {
   marque: string='';
   modele: string='';
 
+ selectedFile: File | null = null;
+
   constructor(private http: HttpClient, 
     private router: Router,
     private service: AnnonceService, 
@@ -29,19 +31,16 @@ export class AjoutervoitureComponent implements OnInit {
   }
 
     onFileSelected(event: any) {
-      const file: File = event.target.files[0];
+      const file: File = event.target.files[0] as File;
       if (file) {
-        // You can access the selected file properties here
         console.log('Selected file:', file);
-        // You can further process the file, e.g., upload it to the server
       }
     }
   addVoiture() {
-    // Prepare the voiture data object
     let voitureData = {
       matricule: this.matricule,
       nombrePlaces: this.nombrePlaces,
-      img: this.img,
+      img: this.selectedFile,
       marque: this.marque,
       modele: this.modele
 
@@ -52,15 +51,13 @@ export class AjoutervoitureComponent implements OnInit {
       (user: any) => {
           const userId = user.id;
 
-          // Make the HTTP request to add the voiture
           this.service.registerVoiture({
                   userId: userId,
-                  ...voitureData // Spread the voitureData object
+                  ...voitureData 
             }).subscribe(
                 (result: any) => {
                     console.log(result);
                     alert("Voiture added successfully");
-                    // Redirect to home page or wherever you need
                     this.router.navigateByUrl('/home');
                 },
                 (error) => {

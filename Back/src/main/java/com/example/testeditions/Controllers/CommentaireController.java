@@ -167,4 +167,38 @@ public class CommentaireController {
         return ResponseEntity.ok(savedReply);
     }
 
+    @DeleteMapping("/delete/{userId}/{idco}")
+    public ResponseEntity<String> deleteCommentaireByUserIdAndIdco(@PathVariable("userId") Long userId, @PathVariable("idco") Long idco) {
+        boolean deleted = commentaireService.deleteCommentaireByUserIdAndIdco(userId, idco);
+        if (deleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Comment not found or deletion failed", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @PostMapping("/like/{commentId}/{userId}")
+    public ResponseEntity<Commentaire> likeComment(@PathVariable Long commentId, @PathVariable Long userId) {
+        // Call service method to like the comment
+        Commentaire commented = commentaireService.likeComment(commentId, userId);
+        if (commented != null) {
+            return new ResponseEntity<>(commented, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/dislike/{commentId}/{userId}")
+    public ResponseEntity<Commentaire> dislikeComment(@PathVariable Long commentId, @PathVariable Long userId) {
+        // Call service method to dislike the comment
+        Commentaire commented = commentaireService.dislikeComment(commentId, userId);
+        if (commented != null) {
+            return new ResponseEntity<>(commented, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

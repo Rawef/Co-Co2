@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailedAnnonceComponent } from './components/detailed-annonce/detailed-annonce.component';
 import { MesannoncesComponent } from './components/mesannonces/mesannonces.component';
-import { AjoutercommentaireComponent } from './components/ajoutercommentaire/ajoutercommentaire.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +17,6 @@ import { AjoutercommentaireComponent } from './components/ajoutercommentaire/ajo
     VoitureComponent,
     AjoutervoitureComponent,
     MesannoncesComponent,
-    AjoutercommentaireComponent,
     DetailedAnnonceComponent
   ],
   imports: [
