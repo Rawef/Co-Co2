@@ -10,12 +10,14 @@ import com.example.testeditions.Repositories.VoitureRepository;
 import com.example.testeditions.Services.AnnonceCovService;
 import com.example.testeditions.Services.UserService;
 import com.example.testeditions.Services.VoitureService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -72,12 +74,12 @@ public class AnnonceCovController {
         }
     }
 
-    @DeleteMapping("remove-annonce/{ida}")
+   /* @DeleteMapping("remove-annonce/{ida}")
     public ResponseEntity<Void> deleteAnnonce(@PathVariable("ida") Long ida) {
         annonceCovService.deleteAnnonce(ida);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+*/
 
 
 
@@ -106,5 +108,47 @@ public class AnnonceCovController {
         }
     }
 
+    @DeleteMapping("/delete/{userId}/{ida}")
+    public ResponseEntity<String> deleteAnnonceByUserIdAndIda(@PathVariable("userId") Long userId, @PathVariable("ida") Long ida) {
+        try {
+
+            annonceCovService.deleteAnnonceByUserIdAndIda(userId, ida);
+            return ResponseEntity.ok("Announcement with ID " + ida + " deleted successfully.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the announcement.");
+        }
+    }
+
+
+    @DeleteMapping("/deleteReservations/{ida}")
+    public ResponseEntity<String> deleteOldReservations(@PathVariable("ida") Long ida) {
+        try {
+            boolean deleted = annonceCovService.deleteOldReservations(ida);
+            if (deleted) {
+                return ResponseEntity.ok().body("Old reservations deleted successfully for annonce with ID " + ida + ". Deletion made.");
+            } else {
+                return ResponseEntity.ok().body("No old reservations found for annonce with ID " + ida);
+            }
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Cannot delete AnnonceCov because there are reservations made less than 48 hours ago for annonce with ID " + ida);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while deleting old reservations for annonce with ID " + ida);
+        }
+    }
+
+
+
+
+
+
 }
+
+
+
 

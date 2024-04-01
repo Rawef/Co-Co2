@@ -57,21 +57,24 @@
 
 
 
-<h2 class="d-flex justify-content-center m-5"><i class="bi bi-car-front"></i> Annonce </h2>
+<h2 class="d-flex justify-content-center m-5"> <i class="bi bi-car-front"></i>  reservation </h2>
 
 <section class="cards-wrapper">
-  <div *ngIf="annonces && annonces.length > 0">
-    <div class="card-grid-space" *ngFor="let annonce of annonces">
-      <div class="card" [style.backgroundImage]="'url(' + annonce.image + ')'">
-        <div>
-          <h1>{{ annonce.titre }}</h1>
-          <p>{{ annonce.placesDisponibles }}</p>
-          <button type="button" (click)="deleteAnnonce(annonce.userId, annonce.ida)">Delete</button>
-        </div>
+
+    <div *ngIf="reservations && reservations.length > 0">
+
+    <div class="card-grid-space" *ngFor="let reservation of reservations">
+        <a class="card" href="https://codetheweb.blog/2017/10/06/html-syntax/" [style.backgroundImage]="'url(' + imageURL +  ')'">
+          <div>
+            <h1>{{ reservation.reservationTime | date: 'medium' }}</h1>
+          </div>
+        </a>
       </div>
-    </div>
-  </div>
-  <div *ngIf="!annonces || annonces.length === 0">
-    <p>No annonce found for the current user.</p>
-  </div>
+            
+        </div>
+        <div *ngIf="reservations && reservations.length === 0">
+          <p>No reservation found for the current user.</p>
+        </div>          
+    
+
 </section>

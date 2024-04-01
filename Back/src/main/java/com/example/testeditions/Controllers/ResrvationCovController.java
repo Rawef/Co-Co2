@@ -2,7 +2,10 @@ package com.example.testeditions.Controllers;
 
 
 import com.example.testeditions.Entites.ReservationCov;
+import com.example.testeditions.Entites.User;
+import com.example.testeditions.Entites.Voiture;
 import com.example.testeditions.Services.ReservationCovService;
+import com.example.testeditions.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,8 @@ public class ResrvationCovController {
 
     @Autowired
     ReservationCovService reservationCovService;
+    @Autowired
+    UserService userService;
 
 
     @GetMapping("/retrieve-all-reservations")
@@ -34,11 +39,11 @@ public class ResrvationCovController {
     }
 
 
-    @PostMapping("/make-reservation/{ida}/{id}")
+    @PostMapping("/make-reservation/{ida}/{userId}")
     public ResponseEntity<ReservationCov> makeReservation(
             @PathVariable Long ida,
-            @PathVariable Long id) {
-        ReservationCov madeReservation = reservationCovService.createReservation(ida, id);
+            @PathVariable Long userId) {
+        ReservationCov madeReservation = reservationCovService.createReservation(ida, userId);
         if (madeReservation != null) {
             return new ResponseEntity<>(madeReservation, HttpStatus.CREATED);
         } else {
@@ -63,5 +68,15 @@ public class ResrvationCovController {
         reservationCovService.deleteReservation(idr);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{userId}")
+    public List<ReservationCov> getReservationByUser(
+            @PathVariable("userId") Long userId
+
+    ) {
+        User user = userService.getUserById(userId);
+        return reservationCovService.getReservationByUser(user);
+
+}
 
 }

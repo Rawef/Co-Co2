@@ -178,26 +178,51 @@ public class CommentaireController {
 
     }
 
-    @PostMapping("/like/{commentId}/{userId}")
-    public ResponseEntity<Commentaire> likeComment(@PathVariable Long commentId, @PathVariable Long userId) {
-        // Call service method to like the comment
-        Commentaire commented = commentaireService.likeComment(commentId, userId);
-        if (commented != null) {
-            return new ResponseEntity<>(commented, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        @PostMapping("/like/{idco}/{userId}")
+        public ResponseEntity<Commentaire> likeComment(@PathVariable Long idco, @PathVariable Long userId) {
+            // Call service method to like the comment
+            Commentaire commented = commentaireService.likeComment(idco, userId);
+            if (commented != null) {
+                return new ResponseEntity<>(commented, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
+
+
+        @PostMapping("/dislike/{idco}/{userId}")
+        public ResponseEntity<Commentaire> dislikeComment(@PathVariable Long idco, @PathVariable Long userId) {
+            // Call service method to dislike the comment
+            Commentaire commented = commentaireService.dislikeComment(idco, userId);
+            if (commented != null) {
+                return new ResponseEntity<>(commented, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+    @GetMapping("/{idco}/likes")
+    public ResponseEntity<Long> getLikeCount(@PathVariable Long idco) {
+        long likeCount = commentaireService.getLikeCount(idco);
+        return new ResponseEntity<>(likeCount, HttpStatus.CREATED);
     }
 
-    @PostMapping("/dislike/{commentId}/{userId}")
-    public ResponseEntity<Commentaire> dislikeComment(@PathVariable Long commentId, @PathVariable Long userId) {
-        // Call service method to dislike the comment
-        Commentaire commented = commentaireService.dislikeComment(commentId, userId);
-        if (commented != null) {
-            return new ResponseEntity<>(commented, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{idco}/dislikes")
+    public ResponseEntity<Long> getDislikeCount(@PathVariable Long idco) {
+        long dislikeCount = commentaireService.getDislikeCount(idco);
+        return new ResponseEntity<>(dislikeCount, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{idco}/likes/{userId}")
+    public ResponseEntity<?> deleteLikeForComment(@PathVariable Long idco, @PathVariable Long userId) {
+        commentaireService.deleteLikeForComment(idco, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{idco}/dislikes/{userId}")
+    public ResponseEntity<?> deleteDislikeForComment(@PathVariable Long idco, @PathVariable Long userId) {
+        commentaireService.deleteDislikeForComment(idco, userId);
+        return ResponseEntity.ok().build();
     }
 
 

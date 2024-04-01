@@ -15,6 +15,7 @@ import { AjoutervoitureComponent } from './covoiturage/components/ajoutervoiture
 import { AjouterannonceComponent } from './covoiturage/components/ajouterannonce/ajouterannonce.component';
 import { DetailedAnnonceComponent } from './covoiturage/components/detailed-annonce/detailed-annonce.component';
 import { MesannoncesComponent } from './covoiturage/components/mesannonces/mesannonces.component';
+import { ReservationComponent } from './covoiturage/components/reservation/reservation.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
   {path:"ajouterannonce" , component:AjouterannonceComponent},
   { path: 'annonces/:ida', component: DetailedAnnonceComponent },
   { path: "annonces", component: MesannoncesComponent },
+  { path: "mesReservations", component: ReservationComponent },
   
 
 

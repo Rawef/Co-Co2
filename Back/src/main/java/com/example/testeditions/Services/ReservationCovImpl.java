@@ -34,9 +34,9 @@ public class ReservationCovImpl implements ReservationCovService {
     }
 
     @Override
-    public ReservationCov createReservation(Long ida, Long id) {
+    public ReservationCov createReservation(Long ida, Long userId) {
         AnnonceCov annonceCov = annonceCovRepository.findById(ida).orElse(null);
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         if (annonceCov != null && user != null && annonceCov.getPlacesDisponibles() > 0) {
             ReservationCov reservation = new ReservationCov();
             reservation.setUser(user);
@@ -78,4 +78,15 @@ public class ReservationCovImpl implements ReservationCovService {
             reservationCovRepository.deleteById(idr);
         }
     }
+
+    @Override
+   public List<ReservationCov> getReservationByUser(User user){
+        return reservationCovRepository.findByUser(user);
+    }
+
+    @Override
+    public List<ReservationCov> getReservationByAnnonceCov(AnnonceCov annonceCov){
+        return reservationCovRepository.findByAnnonceCov(annonceCov);
+    }
+
 }

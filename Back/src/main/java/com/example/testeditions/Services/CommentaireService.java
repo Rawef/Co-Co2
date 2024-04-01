@@ -22,5 +22,13 @@ public interface CommentaireService {
     Commentaire likeComment(Long idco, Long userId);
     Commentaire dislikeComment(Long idco, Long userId);
 
+    long getLikeCount(Long idco);
+    long getDislikeCount(Long idco);
+
+        void deleteLikeForComment(Long idco, Long userId);
+    void deleteDislikeForComment(Long idco, Long userId);
+
+    Commentaire toggleLikeForComment(Long idco, Long userId);
+    Commentaire toggleDislikeForComment(Long idco, Long userId);
 
 }

@@ -1,15 +1,17 @@
 package com.example.testeditions.Services;
 
-import com.example.testeditions.Entites.AnnonceCov;
-import com.example.testeditions.Entites.User;
-import com.example.testeditions.Entites.Voiture;
-import com.example.testeditions.Repositories.AnnonceCovRepository;
-import com.example.testeditions.Repositories.UserRepository;
-import com.example.testeditions.Repositories.VoitureRepository;
+import com.example.testeditions.Entites.*;
+import com.example.testeditions.Repositories.*;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -21,9 +23,12 @@ public class AnnonceCovImpl implements AnnonceCovService {
     @Autowired
     private VoitureService voitureService;
 
+    CommentaireRepository commentaireRepository;
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ReservationCovRepository reservationCovRepository;
     @Autowired
     VoitureRepository voitureRepository;
 
@@ -49,13 +54,11 @@ public class AnnonceCovImpl implements AnnonceCovService {
 
 
         if (user == null || voiture == null ) {
-            throw new RuntimeException("User or Voiture  null");
         }
 
 
         AnnonceCov createdAnnonce = annonceCovRepository.save(annonceCov);
 
-        // Return the created annonceCov
         return createdAnnonce;
     }
 
@@ -86,10 +89,7 @@ public class AnnonceCovImpl implements AnnonceCovService {
 
 
 
-    @Override
-    public void deleteAnnonce(Long ida) {
-        annonceCovRepository.deleteById(ida);
-    }
+
 
     @Override
     public AnnonceCov saveAnnonce(Long userId, String matricule, AnnonceCov annonceCov) {
@@ -119,5 +119,102 @@ public class AnnonceCovImpl implements AnnonceCovService {
     }
 
 
+    /*@Transactional
+    public void deleteAnnonceByUserIdAndIda(Long userId, Long ida)  {
+        AnnonceCov annonceCov = annonceCovRepository.findByUserIdAndIda(ida, userId);
+        if (annonceCov == null) {
+            throw new EntityNotFoundException("AnnonceCov not found for user with id: " + userId);
+        }
+
+
+        List<ReservationCov> reservations = annonceCov.getReservations();
+        LocalDateTime now = LocalDateTime.now();
+        boolean hasRecentReservations = false;
+        for (ReservationCov reservation : reservations) {
+            LocalDateTime reservationTime = reservation.getReservationTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (ChronoUnit.HOURS.between(reservationTime, now) < 48) {
+                hasRecentReservations = true;
+            } else {
+                List<Commentaire> commentaires = commentaireRepository.findByAnnonceCov_Ida(ida);
+                for (Commentaire commentaire : commentaires) {
+                    List<CommentLike> likes = commentaire.getLikes();
+                    likes.clear();
+
+                    List<CommentDislike> dislikes = commentaire.getDislikes();
+                    dislikes.clear();
+
+                    commentaireRepository.delete(commentaire);
+                }
+                reservationCovRepository.delete(reservation);
+            }
+        }
+
+        if (hasRecentReservations) {
+            throw new IllegalStateException("Cannot delete AnnonceCov because there are reservations made less than 48 hours ago");
+        } else {
+            annonceCovRepository.delete(annonceCov);
+        }
+    }*/
+
+
+   @Override
+    public void deleteAnnonceByUserIdAndIda(Long userId, Long ida)  {
+        AnnonceCov annonceCov = annonceCovRepository.findByUserIdAndIda( userId,ida);
+
+
+        List<ReservationCov> reservations = annonceCov.getReservations();
+
+        LocalDateTime now = LocalDateTime.now();
+        boolean hasRecentReservations = false;
+        for (ReservationCov reservation : reservations) {
+            LocalDateTime reservationTime = reservation.getReservationTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (ChronoUnit.HOURS.between(reservationTime, now) < 48) {
+                hasRecentReservations = true;
+            } else {
+
+                reservationCovRepository.delete(reservation);
+            }
+        }
+
+        if (hasRecentReservations) {
+            throw new IllegalStateException("Cannot delete AnnonceCov because there are reservations made less than 48 hours ago");
+        } else {
+            annonceCovRepository.delete(annonceCov);
+        }
+    }
+
+
+    @Override
+    public boolean deleteOldReservations(Long ida) {
+        List<ReservationCov> reservations = reservationCovRepository.findByAnnonceCov_Ida(ida);
+
+        System.out.println("Total reservations for annonce with ID " + ida + ": " + reservations.size());
+
+        LocalDateTime now = LocalDateTime.now();
+        boolean deleted = false;
+        for (ReservationCov reservation : reservations) {
+            LocalDateTime reservationTime = reservation.getReservationTime()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            if (ChronoUnit.HOURS.between(reservationTime, now) >= 48) {
+                reservationCovRepository.delete(reservation);
+                deleted = true;
+                System.out.println("Deleted reservation ID " + reservation.getIdr() + " for annonce with ID " + ida);
+            }
+        }
+
+        return deleted;
+    }
+
 
 }
+
+
+
+
+
+
+
+
+

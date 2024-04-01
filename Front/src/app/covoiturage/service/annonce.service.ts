@@ -55,7 +55,7 @@ export class AnnonceService {
         }),
         catchError((error) => {
           console.error('Error fetching user voitures:', error);
-          return throwError(error); // You can handle the error as per your application's requirements
+          return throwError(error); 
         })
       );
     }
@@ -65,12 +65,12 @@ export class AnnonceService {
       return this.http.post<any>(`${this.baseUrl}/annonces/add/${formData.userId}/${formData.matricule}`, formData).pipe(
         catchError((error) => {
           console.error('Error adding annonce:', error);
-          return throwError(error); // You can handle the error as per your application's requirements
+          return throwError(error); 
         })
       );
     }
     getVoitures(userId: number): Observable<string[]> {
-      const url = `${this.baseUrl}/voiture/${userId}`;
+      const url = `${this.baseUrl}/voitures/voiture/${userId}`;
       return this.http.get<string[]>(url);    }
 
       addComment(annonceCovId: number, userId: number, commentText: string): Observable<any> {
@@ -87,8 +87,8 @@ export class AnnonceService {
         return this.http.get<any[]>(`${this.baseUrl}/commentaires/annonce/${annonceCovId}`);
       }
 
-      likeComment(commentId: number, userId: number): Observable<any> {
-        return this.http.post(`${this.baseUrl}/commentaires/like/${commentId}/${userId}`, {})
+      likeComment(idco: number, userId: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}/commentaires/like/${idco}/${userId}`, {})
           .pipe(
             catchError((error: HttpErrorResponse) => {
               console.error('An error occurred while liking comment:', error);
@@ -96,9 +96,9 @@ export class AnnonceService {
             })
           );
       }
-      
-      dislikeComment(commentId: number, userId: number): Observable<any> {
-        return this.http.post(`${this.baseUrl}/commentaires/dislike/${commentId}/${userId}`, {})
+    
+      dislikeComment(idco: number, userId: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}/commentaires/dislike/${idco}/${userId}`, {})
           .pipe(
             catchError((error: HttpErrorResponse) => {
               console.error('An error occurred while disliking comment:', error);
@@ -107,13 +107,16 @@ export class AnnonceService {
           );
       }
     
-      getLikesForComment(idco: number): Observable<number> {
-        return this.http.get<number>(`${this.baseUrl}/commentaires/likes/${idco}`);
-      }
     
-      getDislikesForComment(idco: number): Observable<number> {
-        return this.http.get<number>(`${this.baseUrl}/commentaires/dislikes/${idco}`);
+      
+      getLikesForComment(idco: number): Observable<number> {
+        return this.http.get<number>(`${this.baseUrl}/commentaires/${idco}/likes`);
       }
+      
+      getDislikesForComment(idco: number): Observable<number> {
+        return this.http.get<number>(`${this.baseUrl}/commentaires/${idco}/dislikes`);
+      }
+      
     
       replyToComment(parentCommentId: number, replyComment: any): Observable<any> {
         return this.http.post(`${this.baseUrl}/commentaires/${parentCommentId}/reply`, replyComment);
@@ -136,5 +139,76 @@ export class AnnonceService {
             })
           );
       }
+
+
+
+      deleteLikeForComment(idco: number, userId: number): Observable<any> {
+        return this.http.delete(`${this.baseUrl}/commentaires/${idco}/likes/${userId}`)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('An error occurred while deleting like for comment:', error);
+              return throwError('Failed to delete like for comment.');
+            })
+          );
+      }
+      
+      deleteDislikeForComment(idco: number, userId: number): Observable<any> {
+        return this.http.delete(`${this.baseUrl}/commentaires/${idco}/dislikes/${userId}`)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('An error occurred while deleting dislike for comment:', error);
+              return throwError('Failed to delete dislike for comment.');
+            })
+          );
+      }
+
+      
+      makeReservation(ida: number, userId: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}/reservations/make-reservation/${ida}/${userId}`, {})
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('An error occurred while making reservation:', error);
+              return throwError('Failed to make reservation.');
+            })
+          );
+      }
+      
+      afficherreservations(userId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}/reservations/${userId}`)
+          .pipe(
+            catchError(error => {
+              console.error('Error fetching user reservations:', error);
+              return throwError('An error occurred while fetching user reservations.');
+            })
+          );}
+
+
+          deleteAnnonce(userId: number, ida: number): Observable<any> {
+            return this.http.delete(`${this.baseUrl}/annonces/delete/${userId}/${ida}`)
+              .pipe(
+                catchError((error: HttpErrorResponse) => {
+                  console.error('An error occurred while deleting annonce:', error);
+                  return throwError('Failed to delete annonce.');
+                })
+              );
+          }
+
+          deleteReservation(ida: number): Observable<any> {
+            return this.http.delete(`${this.baseUrl}/annonces/deleteReservations/${ida}`)
+            .pipe(
+              catchError((error: any) => {
+                  if (error && error.status === 200 && error.error && error.error.includes('less than 48 hours ago')) {
+                      // No deletion due to existing reservations made less than 48 hours ago
+                      return throwError('Cannot delete AnnonceCov because there are reservations made less than 48 hours ago.');
+                  } else {
+                      // Other error occurred
+                      console.error('An error occurred while deleting reservations:', error);
+                      return throwError('Failed to delete reservations.');
+                  }
+              })
+            );
+        }
+        
+          
 
 }

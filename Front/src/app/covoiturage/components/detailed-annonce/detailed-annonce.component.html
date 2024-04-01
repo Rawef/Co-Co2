@@ -76,6 +76,11 @@
                 <p><strong>Stop Point:</strong> {{ annonce?.pointStop }}</p>
                 <p><strong>Distance:</strong> {{ annonce?.distance }}</p>
             </div>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+            <div class="reserve-button">
+                <button class="btn btn-success" (click)="reserve()">Reserve</button>
+            </div>
         </div>
     </section>
 
@@ -102,9 +107,9 @@
                     <a href="javascript:void(0)" (click)="deleteComment(comment.user.id, comment.idco)">Delete</a>
                 </div>
                 <div class="reaction-buttons">
-                    <button (click)="likeComment(comment.idco)">Like</button>
+                    <button (click)="likeComments(comment.idco)">Like</button>
                     <span>Likes: {{ comment.likes }}</span>
-                    <button (click)="dislikeComment(comment.idco)">Dislike</button>
+                    <button (click)="dislikeComments(comment.idco)">Dislike</button>
                     <span>Dislikes: {{ comment.dislikes }}</span>
                 </div>
             </article>

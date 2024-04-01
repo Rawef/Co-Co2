@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailedAnnonceComponent } from './components/detailed-annonce/detailed-annonce.component';
 import { MesannoncesComponent } from './components/mesannonces/mesannonces.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MesannoncesComponent } from './components/mesannonces/mesannonces.compo
     VoitureComponent,
     AjoutervoitureComponent,
     MesannoncesComponent,
-    DetailedAnnonceComponent
+    DetailedAnnonceComponent,
+    ReservationComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { MesannoncesComponent } from './components/mesannonces/mesannonces.compo
     VoitureComponent,
     AjoutervoitureComponent,
     MesannoncesComponent,
-    DetailedAnnonceComponent
+    DetailedAnnonceComponent,
+    ReservationComponent
   ],
 
 })

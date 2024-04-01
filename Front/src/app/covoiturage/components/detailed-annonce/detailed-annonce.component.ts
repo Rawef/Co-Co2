@@ -3,6 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AnnonceService } from '../../service/annonce.service';
 import { ServiceService } from '../../../login/services/service.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { forkJoin, map } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-detailed-annonce',
@@ -19,19 +23,23 @@ export class DetailedAnnonceComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private annonceService: AnnonceService,
-    private userService: ServiceService
+    private userService: ServiceService,
+    private cdr: ChangeDetectorRef 
+
   ) {}
 
   ngOnInit(): void {
     this.getAnnonceDetails();
     this.userService.getLoggedInUser().subscribe((user: any) => {
       if (user) {
-        this.loggedInUserId = user.id; 
-      } else {        // For example, redirect to the login page
-        }      });
+        this.loggedInUserId = user.id;
+      } else {
+        console.error('User is not logged in.');
+      }
+    }, (error) => {
+      console.error('Error retrieving logged-in user:', error);
+    });
   }
-
-  
 
   getAnnonceDetails(): void {
     const idaString = this.route.snapshot.paramMap.get('ida');
@@ -65,40 +73,58 @@ export class DetailedAnnonceComponent implements OnInit {
 
   }
 
+
+
   fetchComments() {
     if (this.annonce && this.annonce.ida) {
       this.annonceService.getCommentsByAnnonce(this.annonce.ida).subscribe((comments: any[]) => {
-        this.comments = comments;
+        // Create an array of observables to fetch likes and dislikes for each comment
+        const observables = comments.map(comment => {
+          return forkJoin([
+            this.annonceService.getLikesForComment(comment.idco),
+            this.annonceService.getDislikesForComment(comment.idco)
+          ]).pipe(
+            map(([likes, dislikes]: [number, number]) => { // Explicitly define types for likes and dislikes
+              comment.likes = likes;
+              comment.dislikes = dislikes;
+              return comment;
+            })
+          );
+        });
+  
+        // Combine all observables into a single observable
+        forkJoin(observables).subscribe((updatedComments: any[]) => { // Explicitly define type for updatedComments
+          this.comments = updatedComments;
+        });
       });
     }
   }
+  
+
+   
+
+  
 
   deleteComment(commentUserId: number, idco: number): void {
-    // Get the logged-in user
     this.userService.getLoggedInUser().subscribe(
       (loggedInUser: any) => {
         if (loggedInUser) {
           const userId = loggedInUser.id;
-          // Proceed with deletion
           this.annonceService.deleteCommentByUserIdAndIdco(userId, idco).subscribe(
             (response) => {
               console.log('Delete comment response:', response);
-              // Remove the comment from the local array upon successful deletion
               this.comments = this.comments.filter(comment => comment.idco !== idco);
             },
             (error) => {
               console.error('Error deleting comment:', error);
-              // Handle error, if necessary
             }
           );
         } else {
           console.error('User is not logged in.');
-          // Handle the case where the user is not logged in, if necessary
         }
       },
       (error) => {
         console.error('Error retrieving logged-in user:', error);
-        // Handle error, if necessary
       }
     );
   }
@@ -107,53 +133,51 @@ export class DetailedAnnonceComponent implements OnInit {
     return this.loggedInUserId === commentUserId;
   }
 
-  likeComment(idco: number): void {
+  likeComments(idco: number): void {
     this.userService.getLoggedInUser().subscribe((user: any) => {
       const userId = user.id;
       this.annonceService.likeComment(idco, userId).subscribe(() => {
-        // Update likes for the specific comment
         this.updateLikesDislikes(idco);
       }, (error) => {
         console.error('Error liking comment:', error);
-        // Handle error, if necessary
       });
     }, (error) => {
       console.error('Error retrieving user information:', error);
-      // Handle error, if necessary
     });
   }
   
-  dislikeComment(idco: number): void {
+  dislikeComments(idco: number): void {
     this.userService.getLoggedInUser().subscribe((user: any) => {
       const userId = user.id;
       this.annonceService.dislikeComment(idco, userId).subscribe(() => {
-        // Update dislikes for the specific comment
         this.updateLikesDislikes(idco);
       }, (error) => {
         console.error('Error disliking comment:', error);
-        // Handle error, if necessary
       });
     }, (error) => {
       console.error('Error retrieving user information:', error);
-      // Handle error, if necessary
     });
   }
-
-  updateLikesDislikes(commentId: number): void {
-    this.annonceService.getLikesForComment(commentId).subscribe((likes: number) => {
-      const index = this.comments.findIndex(comment => comment.idco === commentId);
+  
+  updateLikesDislikes(idco: number): void {
+    this.annonceService.getLikesForComment(idco).subscribe((likes: number) => {
+      const index = this.comments.findIndex(comment => comment.idco === idco);
       if (index !== -1) {
         this.comments[index].likes = likes;
       }
     });
-
-    this.annonceService.getDislikesForComment(commentId).subscribe((dislikes: number) => {
-      const index = this.comments.findIndex(comment => comment.idco === commentId);
+  
+    this.annonceService.getDislikesForComment(idco).subscribe((dislikes: number) => {
+      const index = this.comments.findIndex(comment => comment.idco === idco);
       if (index !== -1) {
         this.comments[index].dislikes = dislikes;
       }
     });
   }
+  
+
+  
+  
   replyToComment(parentCommentId: number, replyText: string): void {
     this.userService.getLoggedInUser().subscribe((user: any) => {
       const replyComment: any = {
@@ -161,15 +185,64 @@ export class DetailedAnnonceComponent implements OnInit {
         user: user
       };
       this.annonceService.replyToComment(parentCommentId, replyComment).subscribe((savedReply: any) => {
-        // Handle success
         console.log('Reply added successfully:', savedReply);
-        // Refresh comments
         this.fetchComments();
       }, error => {
-        // Handle error
         console.error('Error adding reply:', error);
       });
     });
   }
+
+/*  deleteLikeForComment(idco: number): void {
+    this.userService.getLoggedInUser().subscribe((user: any) => {
+      const userId = user.id;
+      this.annonceService.deleteLikeForComment(idco, userId).subscribe(() => {
+        this.updateLikesDislikes(idco);
+      }, (error) => {
+        console.error('Error deleting like:', error);
+      });
+    }, (error) => {
+      console.error('Error retrieving user information:', error);
+    });
+  }
+
+  deleteDislikeForComment(idco: number): void {
+    this.userService.getLoggedInUser().subscribe((user: any) => {
+      const userId = user.id;
+      this.annonceService.deleteDislikeForComment(idco, userId).subscribe(() => {
+        this.updateLikesDislikes(idco);
+      }, (error) => {
+        console.error('Error deleting dislike:', error);
+      });
+    }, (error) => {
+      console.error('Error retrieving user information:', error);
+    });
+  }
+
+  */
+
+
+  reserve(): void {
+    this.userService.getLoggedInUser().subscribe(
+      (user: any) => {
+        const userId = user.id;
+        const annonceId = this.annonce.ida;
+        this.annonceService.makeReservation(annonceId, userId).subscribe(() => {
+          console.log('Reservation successful.');
+          alert("reservation added successfully");
+          
+        }, (error) => {
+          console.error('Error making reservation:', error);
+        });
+      },
+      (error) => {
+        console.error('Error retrieving user information:', error);
+      }
+    );
+    window.location.reload();
+
+  }
+  
+
 
 }
