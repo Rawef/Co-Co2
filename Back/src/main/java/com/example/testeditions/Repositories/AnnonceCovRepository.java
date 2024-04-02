@@ -29,4 +29,7 @@ public interface AnnonceCovRepository extends JpaRepository<AnnonceCov,Long> {
      AnnonceCov findByUserIdAndIda(Long userId, Long ida);
 
 
+    long countByStatus(String status);
+
+
 }

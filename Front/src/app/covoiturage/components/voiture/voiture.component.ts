@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
 export class VoitureComponent implements OnInit {
 voitures: any[] = [];
 
-constructor(private annonceService: AnnonceService, private userService: ServiceService) { }
+constructor(private annonceService: AnnonceService, private userService: ServiceService,    private router: Router
+  ) { }
 
 ngOnInit(): void {
 this.getVoitures();
@@ -34,4 +35,34 @@ this.userService.getLoggedInUser().subscribe(
   }
 );
 }
+
+
+deleteVoiture(userId: number, idv: number): void {
+  this.userService.getLoggedInUser().subscribe(
+    (loggedInUser: any) => {
+      if (loggedInUser) {
+        const userId = loggedInUser.id;
+        console.log('User ID:', userId);
+        console.log('Voiture ID:', idv); // Check the value of idv
+        this.annonceService.deleteVoitureByUserIdAndIdv(userId, idv).subscribe(
+          () => {
+            console.log('Delete voiture response:');
+            this.router.navigateByUrl('/home'); 
+          },
+          (error) => {
+            console.error('Error deleting voiture:', error);
+          }
+        );
+      } else {
+        console.error('User is not logged in.');
+      }
+    },
+    (error) => {
+      console.error('Error retrieving logged-in user:', error);
+    }
+  );
+}
+
+
+
 }

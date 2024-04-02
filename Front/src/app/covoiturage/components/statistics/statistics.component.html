@@ -57,25 +57,27 @@
 
 
 
-<h2 class="d-flex justify-content-center m-5"> <i class="bi bi-car-front"></i>  reservation </h2>
+<!-- statistics.component.html -->
 
-<section class="cards-wrapper">
-
-    <div *ngIf="reservations && reservations.length > 0">
-
-        <div class="card-grid-space" *ngFor="let reservation of reservations">
-            <div class="card" [style.backgroundImage]="'url(' + imageURL +  ')'">
-                <div>
-                    <h1>{{ reservation.reservationTime | date: 'medium' }}</h1>
-                    <button type="button" class="button-link" (click)="deleteReservation(reservation.userId, reservation.idr)">Delete</button>
-                </div>
-            </div>
-        </div>
-            
-        </div>
-        <div *ngIf="reservations && reservations.length === 0">
-          <p>No reservation found for the current user.</p>
-        </div>          
-    
-
-</section>
+<div *ngIf="loading">
+    Loading...
+  </div>
+  
+  <div *ngIf="error">
+    {{ error }}
+  </div>
+  
+  <div *ngIf="!loading && !error">
+    <h2>Statistics</h2>
+    <div class="pie-chart">
+      <div class="segment" [style.width]="calculatePercentage(activeCount)" style="background-color: blue;"></div>
+      <div class="segment" [style.width]="calculatePercentage(inactiveCount)" style="background-color: red;"></div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-color" style="background-color: blue;"></div> Active</div>
+      <div class="legend-item"><div class="legend-color" style="background-color: red;"></div> Inactive</div>
+    </div>
+  </div>
+  
+  
+  

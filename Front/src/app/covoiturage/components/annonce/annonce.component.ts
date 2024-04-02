@@ -17,7 +17,7 @@ export class AnnonceComponent implements OnInit {
   }
 
   viewAnnouncementDetails(ida: number): void {
-    this.router.navigate(['/annonces', ida]); // Assuming the route is '/annonce/:ida'
+    this.router.navigate(['/annonces', ida]); 
   }
 
   getAnnonces(): void {

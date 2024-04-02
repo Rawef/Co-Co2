@@ -14,6 +14,7 @@ export class AjouterannonceComponent implements OnInit {
   annonceForm!: FormGroup;
   selectedVoiture: any;
   voitures: any[] = [];
+  
 
   constructor(private router: Router,
               private annonceService: AnnonceService,
@@ -37,7 +38,11 @@ export class AjouterannonceComponent implements OnInit {
       matricule: ['', Validators.required]
     });
     this.loadUserVoitures();
+  
+
   }
+
+  
 
   loadUserVoitures() {
     const userId = this.userService.getLoggedInUserId();
@@ -61,16 +66,14 @@ export class AjouterannonceComponent implements OnInit {
   onChangeVoiture(event: any) {
     const selectedMatricule = event.target.value;
     console.log('Selected matricule:', selectedMatricule); 
-    // Call the service function to get the voiture based on user ID and matricule
     this.annonceService.getUserVoitureByMatricule(this.userService.getLoggedInUserId(), selectedMatricule)
       .subscribe(
         (voiture: any) => {
           console.log('Selected voiture:', voiture);
-          this.selectedVoiture = voiture; // Assign the retrieved voiture to selectedVoiture
+          this.selectedVoiture = voiture; 
         },
         (error) => {
           console.error('Error fetching voiture:', error);
-          // Handle error if needed
         }
       );
   }
@@ -80,7 +83,6 @@ export class AjouterannonceComponent implements OnInit {
   onSubmit() {
     if (!this.selectedVoiture) {
       console.error("No voiture selected");
-      // Handle the case where no voiture is selected
       return;
     }
 

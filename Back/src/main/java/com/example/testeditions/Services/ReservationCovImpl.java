@@ -1,6 +1,7 @@
 package com.example.testeditions.Services;
 
 import com.example.testeditions.Entites.AnnonceCov;
+import com.example.testeditions.Entites.Commentaire;
 import com.example.testeditions.Entites.ReservationCov;
 import com.example.testeditions.Entites.User;
 import com.example.testeditions.Repositories.AnnonceCovRepository;
@@ -87,6 +88,21 @@ public class ReservationCovImpl implements ReservationCovService {
     @Override
     public List<ReservationCov> getReservationByAnnonceCov(AnnonceCov annonceCov){
         return reservationCovRepository.findByAnnonceCov(annonceCov);
+    }
+
+
+    @Override
+    public boolean deleteReservationByUserId(Long userId, Long idr) {
+        ReservationCov reservationCov = reservationCovRepository.findByUserIdAndIdr(userId, idr);
+        if (reservationCov != null) {
+            AnnonceCov annonceCov = reservationCov.getAnnonceCov();
+            annonceCov.setPlacesDisponibles(annonceCov.getPlacesDisponibles() + 1);
+            annonceCovRepository.save(annonceCov);
+            reservationCovRepository.delete(reservationCov);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

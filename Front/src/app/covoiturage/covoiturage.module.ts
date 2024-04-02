@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DetailedAnnonceComponent } from './components/detailed-annonce/detailed-annonce.component';
 import { MesannoncesComponent } from './components/mesannonces/mesannonces.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -20,12 +22,15 @@ import { ReservationComponent } from './components/reservation/reservation.compo
     MesannoncesComponent,
     DetailedAnnonceComponent,
     ReservationComponent,
+    StatisticsComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxChartsModule
+
   ],
   exports:[
     AnnonceComponent,
@@ -34,7 +39,8 @@ import { ReservationComponent } from './components/reservation/reservation.compo
     AjoutervoitureComponent,
     MesannoncesComponent,
     DetailedAnnonceComponent,
-    ReservationComponent
+    ReservationComponent,
+    StatisticsComponent
   ],
 
 })

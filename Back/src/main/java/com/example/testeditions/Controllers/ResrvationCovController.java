@@ -79,4 +79,16 @@ public class ResrvationCovController {
 
 }
 
+
+    @DeleteMapping("/delete/{userId}/{idr}")
+    public ResponseEntity<String> deleteReservationByUserIdAndIdr(@PathVariable("userId") Long userId, @PathVariable("idr") Long idr) {
+        boolean deleted = reservationCovService.deleteReservationByUserId(userId, idr);
+        if (deleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Comment not found or deletion failed", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
 }

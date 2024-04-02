@@ -26,5 +26,7 @@ public interface AnnonceCovService {
 
     boolean deleteOldReservations(Long ida);
 
+  long countByStatus(String status);
+
 }
 

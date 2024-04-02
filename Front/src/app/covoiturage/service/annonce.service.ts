@@ -198,10 +198,8 @@ export class AnnonceService {
             .pipe(
               catchError((error: any) => {
                   if (error && error.status === 200 && error.error && error.error.includes('less than 48 hours ago')) {
-                      // No deletion due to existing reservations made less than 48 hours ago
                       return throwError('Cannot delete AnnonceCov because there are reservations made less than 48 hours ago.');
                   } else {
-                      // Other error occurred
                       console.error('An error occurred while deleting reservations:', error);
                       return throwError('Failed to delete reservations.');
                   }
@@ -209,6 +207,36 @@ export class AnnonceService {
             );
         }
         
-          
+        deleteReservationByUserIdAndIdr(userId: number, idr: number): Observable<any> {
+          return this.http.delete<any>(`${this.baseUrl}/reservations/delete/${userId}/${idr}`)
+            .pipe(
+              catchError((error: HttpErrorResponse) => {
+                console.error('An error occurred while deleting reservation:', error);
+                return throwError('Failed to delete reservation.');
+              })
+            );
+        }
+
+        deleteVoitureByUserIdAndIdv(userId: number, idv: number): Observable<any> {
+          return this.http.delete<any>(`${this.baseUrl}/voitures/delete/${userId}/${idv}`)
+            .pipe(
+              catchError((error: HttpErrorResponse) => {
+                console.error('An error occurred while deleting voiture:', error);
+                return throwError('Failed to delete voiture.');
+              })
+            );
+        }
+
+
+        getStatistics(): Observable<any> {
+          const url = `${this.baseUrl}/annonces/count`; 
+          return this.http.get<any>(url).pipe(
+            tap(response => console.log('Statistics Response:', response)),
+            catchError(error => {
+              console.error('Error fetching statistics:', error);
+              throw error;
+            })
+          );
+      }
 
 }

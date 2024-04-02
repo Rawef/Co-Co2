@@ -17,5 +17,6 @@ public interface ReservationCovService {
 
     List<ReservationCov> getReservationByAnnonceCov(AnnonceCov annonceCov);
 
+    boolean deleteReservationByUserId(Long userId, Long idr);
 
 }

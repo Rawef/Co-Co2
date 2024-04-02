@@ -208,6 +208,11 @@ public class AnnonceCovImpl implements AnnonceCovService {
     }
 
 
+    public long countByStatus(String status) {
+        return annonceCovRepository.countByStatus(status);
+    }
+
+
 }
 
 

@@ -1429,4 +1429,12 @@ body {
   }
 
   
- 
+  .button-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+.button-link:hover {
+    color: darkblue;
+}

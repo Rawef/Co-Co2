@@ -1428,14 +1428,37 @@ body {
     }
   }
 
-  .button-link {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer; /* Show pointer cursor on hover */
-}
-
-.button-link:hover {
-    color: darkblue;
-}
-
+  
+  .pie-chart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .segment {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+  }
+  
+  .legend {
+    margin-top: 20px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  
  

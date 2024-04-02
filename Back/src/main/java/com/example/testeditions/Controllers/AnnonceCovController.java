@@ -2,6 +2,7 @@ package com.example.testeditions.Controllers;
 
 
 import com.example.testeditions.DTO.AnnonceCovRequestDto;
+import com.example.testeditions.DTO.StatisticDTO;
 import com.example.testeditions.Entites.AnnonceCov;
 import com.example.testeditions.Entites.User;
 import com.example.testeditions.Entites.Voiture;
@@ -13,6 +14,7 @@ import com.example.testeditions.Services.VoitureService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -143,6 +145,13 @@ public class AnnonceCovController {
     }
 
 
+
+    @GetMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
+    public StatisticDTO getAnnonceStatusCounts() {
+        long activeCount = annonceCovService.countByStatus("ACTIVE");
+        long inactiveCount = annonceCovService.countByStatus("INACTIVE");
+        return new StatisticDTO(activeCount, inactiveCount);
+    }
 
 
 

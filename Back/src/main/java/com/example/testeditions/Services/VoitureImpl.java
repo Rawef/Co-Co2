@@ -1,6 +1,7 @@
 package com.example.testeditions.Services;
 
 import com.example.testeditions.Entites.AnnonceCov;
+import com.example.testeditions.Entites.Commentaire;
 import com.example.testeditions.Entites.User;
 import com.example.testeditions.Entites.Voiture;
 import com.example.testeditions.Repositories.VoitureRepository;
@@ -79,5 +80,17 @@ public class VoitureImpl implements VoitureService{
     public Voiture getVoitureByUserAndMatricule(User user, String matricule) {
         return voitureRepository.findByUserAndMatricule(user, matricule).orElse(null);
     }
+
+    @Override
+    public boolean deleteVoitureByUserIdAndIdv(Long userId, Long idv) {
+        Voiture voiture = voitureRepository.findByUserIdAndIdv(userId, idv);
+        if (voiture != null) {
+            voitureRepository.delete(voiture);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 

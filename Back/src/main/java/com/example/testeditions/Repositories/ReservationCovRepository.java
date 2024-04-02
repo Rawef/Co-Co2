@@ -1,9 +1,6 @@
 package com.example.testeditions.Repositories;
 
-import com.example.testeditions.Entites.AnnonceCov;
-import com.example.testeditions.Entites.ReservationCov;
-import com.example.testeditions.Entites.User;
-import com.example.testeditions.Entites.Voiture;
+import com.example.testeditions.Entites.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +17,5 @@ public interface ReservationCovRepository extends JpaRepository<ReservationCov,L
     List<ReservationCov> findByAnnonceCov_Ida(Long ida);
 
 
+    ReservationCov findByUserIdAndIdr(Long userId, Long idr);
 }

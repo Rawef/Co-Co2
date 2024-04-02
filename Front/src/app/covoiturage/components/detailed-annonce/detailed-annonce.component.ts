@@ -5,6 +5,7 @@ import { ServiceService } from '../../../login/services/service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin, map } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 
@@ -24,11 +25,12 @@ export class DetailedAnnonceComponent implements OnInit {
     private route: ActivatedRoute,
     private annonceService: AnnonceService,
     private userService: ServiceService,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef ,private router: Router
 
   ) {}
 
   ngOnInit(): void {
+
     this.getAnnonceDetails();
     this.userService.getLoggedInUser().subscribe((user: any) => {
       if (user) {
@@ -78,13 +80,12 @@ export class DetailedAnnonceComponent implements OnInit {
   fetchComments() {
     if (this.annonce && this.annonce.ida) {
       this.annonceService.getCommentsByAnnonce(this.annonce.ida).subscribe((comments: any[]) => {
-        // Create an array of observables to fetch likes and dislikes for each comment
         const observables = comments.map(comment => {
           return forkJoin([
             this.annonceService.getLikesForComment(comment.idco),
             this.annonceService.getDislikesForComment(comment.idco)
           ]).pipe(
-            map(([likes, dislikes]: [number, number]) => { // Explicitly define types for likes and dislikes
+            map(([likes, dislikes]: [number, number]) => { 
               comment.likes = likes;
               comment.dislikes = dislikes;
               return comment;
@@ -92,8 +93,7 @@ export class DetailedAnnonceComponent implements OnInit {
           );
         });
   
-        // Combine all observables into a single observable
-        forkJoin(observables).subscribe((updatedComments: any[]) => { // Explicitly define type for updatedComments
+        forkJoin(observables).subscribe((updatedComments: any[]) => { 
           this.comments = updatedComments;
         });
       });
@@ -230,7 +230,8 @@ export class DetailedAnnonceComponent implements OnInit {
         this.annonceService.makeReservation(annonceId, userId).subscribe(() => {
           console.log('Reservation successful.');
           alert("reservation added successfully");
-          
+          // Store the user ID in sessionStorage
+          this.router.navigateByUrl('/mesReservations');
         }, (error) => {
           console.error('Error making reservation:', error);
         });
@@ -239,8 +240,6 @@ export class DetailedAnnonceComponent implements OnInit {
         console.error('Error retrieving user information:', error);
       }
     );
-    window.location.reload();
-
   }
   
 

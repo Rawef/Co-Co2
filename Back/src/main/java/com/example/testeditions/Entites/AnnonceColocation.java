@@ -20,7 +20,7 @@ public class AnnonceColocation implements Serializable {
     private Long id;
     private String titre;
     private String description;
-    private Status status;
+    private String  status;
     @Temporal(TemporalType.DATE)
     private Date date_annonce;
     private String image;

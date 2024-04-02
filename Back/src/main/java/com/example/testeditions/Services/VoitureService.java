@@ -16,6 +16,10 @@ public interface VoitureService {
     List<Voiture> getVoituresByUser(User user);
     Voiture getVoitureByMatricule(String matricule);
     Voiture getVoitureByUserAndMatricule(User user, String matricule);
+
+
+    boolean deleteVoitureByUserIdAndIdv(Long userId, Long idv);
+
 }
 
 

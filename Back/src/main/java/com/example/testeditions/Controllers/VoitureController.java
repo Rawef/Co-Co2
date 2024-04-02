@@ -104,4 +104,16 @@ public class VoitureController {
         }
     }
 
+    @DeleteMapping("/delete/{userId}/{idv}")
+    public ResponseEntity<String> deleteVoitureByUserIdAndIdv(@PathVariable("userId") Long userId, @PathVariable("idv") Long idv) {
+        boolean deleted = voitureService.deleteVoitureByUserIdAndIdv(userId, idv);
+        if (deleted) {
+            return new ResponseEntity<>("Voiture deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Voiture not found or deletion failed", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 }
