@@ -14,6 +14,13 @@ import { FormsModule } from '@angular/forms';
 import { LoginModule } from './login/login.module';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { SocketService } from './socket.service';
+import { EventComponent } from './eventt/event.component'; // Import the EventComponent
+import { EventtModule } from './eventt/eventt.module';
+import { from } from 'rxjs';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+
 
 
 const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
@@ -23,6 +30,9 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
 @NgModule({
   declarations: [
     AppComponent,
+    EventComponent,
+  
+  
     
   ],
   imports: [
@@ -35,14 +45,16 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
     HomeModule,
     LoginModule,
     SocketIoModule.forRoot(config),
-    
+    EventtModule,
+    MatSnackBarModule,
     
     
 
   ],
   providers: [
     provideClientHydration(),
-    SocketService
+    SocketService,
+    provideAnimationsAsync()
    
   ],
   bootstrap: [AppComponent]

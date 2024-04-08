@@ -1,0 +1,16 @@
+<form (submit)="addEvent()">
+    <label>Place:</label>
+    <input type="text" [(ngModel)]="place" name="place" required><br>
+  
+    <label>Time:</label>
+    <input type="text" [(ngModel)]="time" name="time" required><br>
+  
+    <label>Description:</label>
+    <textarea [(ngModel)]="description" name="description" required></textarea><br>
+  
+    <label>Image URL:</label>
+    <input type="text" [(ngModel)]="imageUrl" name="imageUrl"><br>
+  
+    <button type="submit">Add Event</button>
+  </form>
+  
