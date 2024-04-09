@@ -1,16 +1,27 @@
 <form (submit)="addEvent()">
-    <label>Place:</label>
-    <input type="text" [(ngModel)]="place" name="place" required><br>
-  
-    <label>Time:</label>
-    <input type="text" [(ngModel)]="time" name="time" required><br>
-  
-    <label>Description:</label>
-    <textarea [(ngModel)]="description" name="description" required></textarea><br>
-  
-    <label>Image URL:</label>
-    <input type="text" [(ngModel)]="imageUrl" name="imageUrl"><br>
-  
-    <button type="submit">Add Event</button>
-  </form>
-  
+  <label>Place:</label>
+  <input type="text" [(ngModel)]="place" name="place" required><br>
+
+  <label>Time:</label>
+  <input type="text" [(ngModel)]="time" name="time" required><br>
+
+  <label>Description:</label>
+  <textarea [(ngModel)]="description" name="description" required></textarea><br>
+
+  <label>Image URL:</label>
+  <input type="text" [(ngModel)]="imageUrl" name="imageUrl"><br>
+
+  <button type="submit">Add Event</button>
+</form>
+
+<div *ngFor="let event of events" class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <p class="title">Event at {{ event.time }}</p>
+      <p>{{ event.place }}</p>
+    </div>
+    <div class="flip-card-back">
+      <p class="title">Description</p>
+      <p>{{ event.description }}</p>
+    </div>
+  </div>
