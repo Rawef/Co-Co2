@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TicketComponent } from './ticket/ticket.component';
-
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
@@ -9,7 +9,8 @@ import { TicketComponent } from './ticket/ticket.component';
     TicketComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    QRCodeModule
   ]
 })
 export class EventtModule { }

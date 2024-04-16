@@ -1,1 +1,24 @@
-<p>ticket works!</p>
+<!-- ticket.component.html -->
+
+<div *ngIf="events.length > 0 else loading" class="card-container">
+    <div *ngFor="let event of events" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <p class="title">Event at {{ event.time }}</p>
+          <p>{{ event.place }}</p>
+        </div>
+        <div class="flip-card-back">
+          <p class="title">Description</p>
+          <p>{{ event.description }}</p>
+          <button (click)="openQrDialog(myAngularxQrCode)">
+            Participate
+          </button>
+           
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <p>Loading events...</p>
+  </ng-template>

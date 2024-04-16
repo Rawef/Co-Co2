@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
-interface EventData {
+ export interface EventData {
   place: string;
   time: string;
   description: string;
   imageUrl: string;
 }
+
+
 
 
 @Component({
@@ -54,9 +57,16 @@ export class EventComponent {
 
 
   }
+
+
+
+
+
   private showNotification(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000, // Set the duration for the notification (in milliseconds)
     })
   }
+
+  
 }

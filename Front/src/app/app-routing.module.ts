@@ -10,6 +10,7 @@ import { ProfileComponent } from './login/component/profile/profile.component';
 import { UpdateComponent } from './login/component/update/update.component';
 import { ChatComponent } from './login/component/chat/chat.component';
 import { EventComponent } from './eventt/event.component';
+import { TicketComponent } from './eventt/ticket/ticket.component';
 
 const routes: Routes = [
 
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path:"" , component:LoginComponent},
   { path: 'event', component: EventComponent },
   {path:"preferances" , component:PreferancesComponent},
+  {path :"ticket",  component:TicketComponent},
   {path:"**",redirectTo:"home" ,pathMatch:"full"} 
 
   

@@ -19,6 +19,11 @@ import { EventtModule } from './eventt/eventt.module';
 import { from } from 'rxjs';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { QRCodeModule } from 'angularx-qrcode';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { QrDialogComponent } from './qr-dialog/qr-dialog.component';
+
 
 
 
@@ -31,6 +36,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
   declarations: [
     AppComponent,
     EventComponent,
+    QrDialogComponent,
+    
   
   
     
@@ -47,6 +54,9 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
     SocketIoModule.forRoot(config),
     EventtModule,
     MatSnackBarModule,
+    QRCodeModule,
+    MatIconModule,
+    MatDialogModule,
     
     
 

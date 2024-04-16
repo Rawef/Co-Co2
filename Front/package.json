@@ -28,6 +28,7 @@
     "@tensorflow-models/toxicity": "^1.2.2",
     "@tensorflow/tfjs": "^4.16.0",
     "@types/websocket": "^1.0.10",
+    "angularx-qrcode": "^17.0.0",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
     "compass-mixins": "^0.12.12",
