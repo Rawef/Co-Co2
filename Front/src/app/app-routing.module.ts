@@ -10,6 +10,8 @@ import { ProfileComponent } from './login/component/profile/profile.component';
 import { UpdateComponent } from './login/component/update/update.component';
 import { ChatComponent } from './login/component/chat/chat.component';
 import { ScheduleComponent } from './covoiturage/component/schedule/schedule.component';
+import { EventComponent } from './eventt/event.component';
+import { TicketComponent } from './eventt/ticket/ticket.component';
 
 
 const routes: Routes = [
@@ -20,7 +22,9 @@ const routes: Routes = [
   {path:"update" , component:UpdateComponent},
   {path:"chat" , component:ChatComponent},
   {path:"schedule" , component:ScheduleComponent},
+  {path :"ticket",  component:TicketComponent},
   {path:"" , component:LoginComponent},
+  { path: 'event', component: EventComponent },
   {path:"preferances" , component:PreferancesComponent},
   {path:"**",redirectTo:"home" ,pathMatch:"full"} 
 
