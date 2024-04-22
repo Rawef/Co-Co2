@@ -10,22 +10,24 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Schedule {
+public class Certification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "schedule_id")
-    private int scheduleId;
+    private Long Ceid;
 
-    private String date;
+    private String name;
+    private String prenom;
     private String area;
-    private String station;
-    private String availability;
-    private int price;
+    private String voiture;
+    private String etat;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+
+
+    // Constructors, getters, and setters
 }

@@ -16,9 +16,9 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom ;
+    private String nom;
     private String email;
     private String password;
     private int telephone;
@@ -32,11 +32,11 @@ public class User {
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Preferences> preferences;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReservationCov> reservations;
 
     @JsonIgnore
@@ -44,25 +44,31 @@ public class User {
     private List<AnnonceCov> annonceCov;
 
 
-
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     private List<Reclamation> Reclamations;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Post> Posts;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Subscription> subscriptions;
 
+
+
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
-    private List<Schedule> schedules;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Certification> certifications;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
 
+    // Define the getter method for tickets
+    public List<Ticket> getTickets() {
+        return tickets;
 
-
-
+    }
 }

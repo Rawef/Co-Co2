@@ -52,7 +52,6 @@ public class UserController {
         User savedUser = userService.save(userDTO);
 
         // Send verification code to the user's email
-        userService.sendVerificationCode(savedUser.getEmail());
 
         // Return the saved user
         return savedUser;

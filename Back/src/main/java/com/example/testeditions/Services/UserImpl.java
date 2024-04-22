@@ -7,13 +7,10 @@ import com.example.testeditions.Entites.User;
 import com.example.testeditions.Exception.UsernameAlreadyUsedException;
 import com.example.testeditions.Payload.Response.LoginMesage;
 import com.example.testeditions.Repositories.UserRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +25,7 @@ public class UserImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder; // Inject PasswordEncoder
 
-    @Autowired
-    private JavaMailSender emailSender;
+
 
     @Override
     public User getUserById(Long userId) {
@@ -158,14 +154,7 @@ public class UserImpl implements UserService {
 
 
 
-    @Override
-    public void sendVerificationCode(String toEmail) {
-        String verificationCode = generateVerificationCode(); // Generate verification code
-        String subject = "Verification Code";
-        String body = "Your verification code is: " + verificationCode;
 
-        sendEmail(toEmail, subject, body);
-    }
 
     @Override
     public String generateVerificationCode() {
@@ -173,18 +162,6 @@ public class UserImpl implements UserService {
         Random random = new Random();
         int code = 1000 + random.nextInt(9000);
         return String.valueOf(code);
-    }
-
-    @Override
-    public void sendEmail(String toEmail, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("racem.messaoudi@gmail.com");
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(body);
-
-        emailSender.send(message);
-        System.out.println("Mail Sent successfully...");
     }
 
 }
