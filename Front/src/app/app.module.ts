@@ -15,6 +15,24 @@ import { LoginModule } from './login/login.module';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { SocketService } from './socket.service';
 import { CovoiturageModule } from './covoiturage/covoiturage.module';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
+
+
+import { EventComponent } from './eventt/event.component'; // Import the EventComponent
+import { EventtModule } from './eventt/eventt.module';
+import { from } from 'rxjs';
+
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { QRCodeModule } from 'angularx-qrcode';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { QrDialogComponent } from './qr-dialog/qr-dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+
+
 
 
 const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
@@ -24,6 +42,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
 @NgModule({
   declarations: [
     AppComponent,
+    EventComponent,
+    QrDialogComponent,
     
   ],
   imports: [
@@ -36,7 +56,14 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
     HomeModule,
     LoginModule,
     SocketIoModule.forRoot(config),
-    CovoiturageModule
+    CovoiturageModule,
+    EventtModule,
+    MatSnackBarModule,
+    QRCodeModule,
+    MatIconModule,
+    MatDialogModule,
+    BrowserAnimationsModule ,
+
     
     
     
@@ -44,7 +71,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8089', options: {} };
   ],
   providers: [
     provideClientHydration(),
-    SocketService
+    SocketService,
+    provideAnimationsAsync()
    
   ],
   bootstrap: [AppComponent]
